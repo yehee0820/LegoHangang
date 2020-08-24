@@ -31,29 +31,31 @@
             showMyPlace();
         })
 
-        #_pcmap_list_scroll_container > ul > li:nth-child(2) > div._1IVzZ > a > div._1JnOs > div > span._2EZQu
-        #_pcmap_list_scroll_container > ul > li:nth-child(1) > div._1IVzZ > a > div._1JnOs > div > span._2EZQu
 
-        function showMyPlace(){
+        function showMyPlace() {
             $.ajax({
-                type:'GET',
-                url:'http://spartacodingclub.shop/post',
-                data:{},
-                success: function(response){
-                    let article=response['articles'];
-                    for(let i=0; i<article.length; i++){
-                        let image=article[i]['image'];
-                        let url=article[i]['url'];
-                        let title=article[i]['title'];
-                        let desc=article[i]['desc'];
-                        let comment=article[i]['comment'];
+                type: 'POST',
+                url: 'https://pcmap-api.place.naver.com/graphql',
+                data: {},
+                success: function (data) {
 
-                        makeCard(image, url, title, desc, comment);
-                        //아래랑 변수 순서 똑같이 해줘야 한다!
-                    }
+                    console.log(JSON.stringify(data));
 
-                }
-            })
+                    PlaceToGo(image, name, loc, time, comment, url);
+                    //아래랑 변수 순서 똑같이 해줘야 한다!
+
+                },
+
+                error: function (data) {
+
+                    console.log(JSON.stringify(data));
+
+
+
+            }
+        }
+
+        )
         }
 
 
@@ -67,7 +69,7 @@
                                alt="Snowy Mountains">
             <div class="card__content">
                 <h1 class="card__header">${name}</h1>
-                <p class="card__text"><strong>위 </strong>${loc} <br>
+                <p class="card__text"><strong>위치</strong>${loc} <br>
                 <strong>영업시간 </strong>${time} <br>
                 ${comment}</p>
                 <button href="${url}" class="card__btn">더 많은 정보<span>&rarr;</span></button>
@@ -121,7 +123,7 @@
             </div>
         </div>
     </div>
-     <div class="grid__item">
+    <div class="grid__item">
         <div class="card"><img class="card__img"
                                src="#"
                                alt="Snowy Mountains">
