@@ -126,14 +126,15 @@
 
 
     <hr class="featurette-divider">
-<div id="result-box">
-    <div id="map" style="width:60%;height:400px;"></div>
-    <div id="show-info-box" style="height:400px; width:30%; place-items: flex-end">
+<div id="result-box" class="row">
+    <div id="map" class="col-md-8" style="height:400px"></div> <!-- this is jido -->
+    <div id="show-info-box" class="col-md-4">
         <p>이동경로</p>
         <p>환승역</p>
         <p>소요시간</p>
     </div>
     </div>
+
     <!-- Naver Developers에서 발급받은 네이버지도 Application Key 입력  -->
     <script type="text/javascript"
             src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=3hxpwhkwla"></script>

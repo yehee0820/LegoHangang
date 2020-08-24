@@ -67,13 +67,13 @@
     -webkit-transform: translateY(0px);
     transform: translateY(0px);
     bottom: 0px;
-    background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+    background: linear-gradient(-20deg, #6e45e2 0%, #88d3ce 100%);
 }
 
 .dropdown-item:hover, .dropdown-item:focus {
     color: #FCF0E7;
     text-decoration: none;
-    background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+    background: linear-gradient(-20deg, #6e45e2 0%, #88d3ce 100%);
 }
 
 .dropdown-menu {

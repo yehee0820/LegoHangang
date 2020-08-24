@@ -97,7 +97,7 @@
                 $("#btn-post-box").text("포스팅 박스 닫기");
             }
         }
-
+// postArticle만 없애여....
         function postArticle() {
             let nickname = $("#post-nickname").val();
             let title = $("#post-title").val();
@@ -144,7 +144,7 @@
                         <a class="card-title">${title}</a>
                         <p class="card-text nickname">${nickname}</p>
                         <p class="card-text">${parkLoc}</p>
-                        <p class="card-img">${img}</p>
+                        <img class="card-img">${img}</img>
                         <p class="card-text comment">${comment}</p>
                         </div>
                     </div>`;
@@ -224,47 +224,53 @@
             </button>
         </p>
     </div>
-    <div id="post-box" class="form-post" style="display:none">
-        <div>
-            <div class="form-group">
-                <label for="post-nickname">닉네임</label>
-                <input id="post-nickname" class="form-control" placeholder="">
-            </div>
-            <div class="form-group">
-                <label for="post-title">리뷰 제목</label>
-                <input id="post-title" class="form-control" rows="2">
-            </div>
-            <div class="form-group">
-                <label for="post-location">장소</label>
-                <select id="post-location" class="custom-select" aria-label="Example select with button addon" rows="2">
-                    <option selected>어느 지역에 대한 리뷰인가요?</option>
-                    <option value="1">여의도</option>
-                    <option value="2">난지</option>
-                    <option value="3">뚝섬</option>
-                    <option value="4">광나루</option>
-                    <option value="5">강서</option>
-                    <option value="6">잠실</option>
-                    <option value="7">망원</option>
-                    <option value="8">양화</option>
-                    <option value="9">이촌</option>
-                    <option value="10">잠원</option>
-                    <option value="11">반포</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="post-img">업로드 할 사진을 선택해주세요: </label>
+    <form action='/date'  method="POST"  enctype="multipart/form-data">
+        <div id="post-box" class="form-post" style="display:none">
+            <div>
+                <div class="form-group">
+                    <label for="post-nickname">닉네임</label>
+                    <input id="post-nickname" name ="post-nickname" type="text" class="form-control" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="post-title">리뷰 제목</label>
+                    <input id="post-title" name="post-title" type="text" class="form-control" rows="2">
+                </div>
+                <div class="form-group">
+                    <label for="post-location">장소</label>
+                    <select id="post-location" name="post-location" class="custom-select" aria-label="Example select with button addon"
+                            rows="2">
+                        <option selected>어느 지역에 대한 리뷰인가요?</option>
+                        <option value="1">여의도</option>
+                        <option value="2">난지</option>
+                        <option value="3">뚝섬</option>
+                        <option value="4">광나루</option>
+                        <option value="5">강서</option>
+                        <option value="6">잠실</option>
+                        <option value="7">망원</option>
+                        <option value="8">양화</option>
+                        <option value="9">이촌</option>
+                        <option value="10">잠원</option>
+                        <option value="11">반포</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="post-img">업로드 할 사진을 선택해주세요: </label>
 
-                <input type="file"
-                       id="post-img" class="form-control-file"
-                       accept="image/png, image/jpeg">
+                    <input type="file"
+                           id="post-img" name="post-img" class="form-control-file"
+                           accept="image/png, image/jpeg">
+                </div>
+                <div class="form-group">
+                    <label for="post-comment">간단 코멘트</label>
+                    <textarea id="post-comment" name="post-comment" type="text" class="form-control" rows="7"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" id="btn-review-upload">리뷰 등록
+                </button>
             </div>
-            <div class="form-group">
-                <label for="post-comment">간단 코멘트</label>
-                <textarea id="post-comment" class="form-control" rows="7"></textarea>
-            </div>
-            <button type="button" class="btn btn-primary" id="btn-review-upload" onclick="postArticle()">리뷰 등록</button>
         </div>
-    </div>
+    </form>
+
+
     <div id="cards-box" class="card-columns">
         <div class="card">
             <div class="card-body">

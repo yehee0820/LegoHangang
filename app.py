@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify
+from pymongo.binary import Binary
 from pymongo import MongoClient
 from bs4 import BeautifulSoup
 import requests
@@ -10,7 +11,7 @@ db = client.hangangdb  # 'dbsparta'라는 이름의 db를 만듭니다.
 
 @app.route('/')
 def index():
-    return render_template('location.html')
+    return render_template('review.html')
 
 
 @app.route('/get_location', methods=['POST'])
@@ -28,21 +29,21 @@ def test_origin():
 ####################
 
 @app.route('/date', methods=['POST'])
-def post_article():
-    # 1. 클라이언트로부터 데이터를 받기
-    name_receive = request.form['nickname']
-    title_receive = request.form['title']
-    loc_receive = request.form['parkLoc']
-    img_receive = request.form['img']
-    comment_receive = request.form['comment']
+def upload_file():
+    img_receive = request.files['post-img']
+    print(img_receive)
+    name_receive = request.form['post-nickname']
+    title_receive = request.form['post-title']
+    loc_receive = request.form['post-location']
+    comment_receive = request.form['post-comment']
 
-
-    review = {'nickname': name_receive, 'title': title_receive, 'parkLoc': loc_receive, 'img': img_receive, 'comment': comment_receive}
+    review = {'nickname': name_receive, 'title': title_receive, 'parkLoc': loc_receive, 'img': img_receive,
+           'comment': comment_receive}
 
     # 3. mongoDB에 데이터를 넣기
     db.reviews.insert_one(review)
 
-    return jsonify({'result': 'success', 'data': review})
+    return jsonify({'result': 'success', 'reviews': review})
 
 
 @app.route('/date', methods=['GET'])
