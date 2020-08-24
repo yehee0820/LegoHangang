@@ -184,7 +184,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#" target="_self">Home
+                        <a class="nav-link" href="{{ url_for('index') }}" target="_self">Home
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
@@ -193,7 +193,7 @@
                            data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">공원별정보</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">위치</a>
+                            <a class="dropdown-item" href="{{ url_for('show_location') }}">위치</a>
                             <a class="dropdown-item" href="#">자전거 대여</a>
                             <a class="dropdown-item" href="#">기상 정보</a>
                         </div>
@@ -203,10 +203,10 @@
                         <a class="nav-link" href="#">배달/대여</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">주변핫플찾기</a>
+                        <a class="nav-link" href="place.html">주변핫플찾기</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">feedback</a>
+                        <a class="nav-link" href="{{ url_for('review_date')}}">데이트 코스 추천</a>
                     </li>
                 </ul>
             </div>

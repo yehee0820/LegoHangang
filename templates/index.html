@@ -149,7 +149,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#" target="_self">Home
+                        <a class="nav-link" href="{{ url_for('index') }}" target="_self">Home
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
@@ -158,7 +158,7 @@
                            data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">공원별정보</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">위치</a>
+                            <a class="dropdown-item" href="{{ url_for('show_location') }}">위치</a>
                             <a class="dropdown-item" href="#">자전거 대여</a>
                             <a class="dropdown-item" href="#">기상 정보</a>
                         </div>
@@ -168,10 +168,10 @@
                         <a class="nav-link" href="#">배달/대여</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">주변핫플찾기</a>
+                        <a class="nav-link" href="place.html">주변핫플찾기</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">feedback</a>
+                        <a class="nav-link" href="{{ url_for('review_date')}}">데이트 코스 추천</a>
                     </li>
                 </ul>
             </div>
@@ -246,10 +246,10 @@
                 <div class="card">
                     <div class="card__image card__image--river"></div>
                     <div class="card__content">
-                        <div class="card__title">배달음식 및 대여 정보</div>
-                        <p class="card__text">한강에 친구들과 가면 "우리 뭐 먹지?"라는 고민을 가장 먼저 하게 됩니다. 이 페이지에서 어떤 음식을 배달해 먹으면 좋을지
-                            정해보세요! 또한 피크닉 세트를 대여할 수 있는 주변 카페의 정보도 알려줍니다.</p>
-                        <button class="btn btn--block btn-2">Let's go</button>
+                        <div class="card__title">데이트 코스 추천</div>
+                        <p class="card__text">한강공원을 포함한 좋은 데이트 코스, 친구들과 함께 한 추억이 있다면 공유해 주세요. 공원에 대한 후기, 그 주변의 상권에 대한 후기 등 다양한 리뷰를 등록해보세요.</p>
+                        <form action="/date">
+                        <button class="btn btn--block btn-2" type="submit">Let's go</button></form>
                     </div>
                 </div>
             </li>
@@ -258,8 +258,7 @@
                     <div class="card__image card__image--record"></div>
                     <div class="card__content">
                         <div class="card__title">공원 주변 핫플레이스</div>
-                        <p class="card__text">공원에서 다른 곳으로 가고 싶거나 갑자기 비가 올 때, 어떻게 해야 할까요? 해당 공원 주변에 인기있는 맛집, 카페 그리고 실내
-                            데이트 장소들을 추천해드립니다.</p>
+                        <p class="card__text">공원에서 다른 곳으로 가고 싶거나 갑자기 비가 올 때, 어떻게 해야 할까요? 해당 공원 주변에 인기있는 맛집, 카페들을 추천해드립니다.</p>
                         <button class="btn btn--block btn-3">Let's go</button>
                     </div>
                 </div>

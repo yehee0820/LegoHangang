@@ -22,6 +22,7 @@
 
     <link href="../static/navbar.css" rel="stylesheet">
 
+
     <!--navbar javascript-->
     <script>
         $(document).ready(function () {
@@ -44,6 +45,26 @@
             min-height: 90vh;
             font-family: 'Open Sans', sans-serif;
         }
+
+        @media (min-width: 40rem) {
+            .col-md-8 {
+                width: 90%;
+            }
+
+            .col-md-4 {
+                width: 90%;
+            }
+        }
+
+        @media (min-width: 56rem) {
+            .col-md-8 {
+                width: 33.3333%;
+            }
+
+            .col-md-4 {
+                width: 33.3333%;
+            }
+        }
     </style>
 
 </head>
@@ -64,7 +85,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#" target="_self">Home
+                        <a class="nav-link" href="{{ url_for('index') }}" target="_self">Home
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
@@ -73,7 +94,7 @@
                            data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">공원별정보</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">위치</a>
+                            <a class="dropdown-item" href="{{ url_for('show_location') }}">위치</a>
                             <a class="dropdown-item" href="#">자전거 대여</a>
                             <a class="dropdown-item" href="#">기상 정보</a>
                         </div>
@@ -83,10 +104,10 @@
                         <a class="nav-link" href="#">배달/대여</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">주변핫플찾기</a>
+                        <a class="nav-link" href="place.html">주변핫플찾기</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">feedback</a>
+                        <a class="nav-link" href="{{ url_for('review_date')}}">데이트 코스 추천</a>
                     </li>
                 </ul>
             </div>
@@ -126,24 +147,25 @@
 
 
     <hr class="featurette-divider">
-<div id="result-box" class="row">
-    <div id="map" class="col-md-8" style="height:400px"></div> <!-- this is jido -->
-    <div id="show-info-box" class="col-md-4">
-        <p>이동경로</p>
-        <p>환승역</p>
-        <p>소요시간</p>
-    </div>
+    <div id="result-box" class="row">
+        <div id="map" class="col-md-8" style="height:400px"></div> <!-- this is jido -->
+        <div id="show-info-box" class="col-md-4">
+            <p>이동경로</p>
+            <p>환승역</p>
+            <p>소요시간</p>
+        </div>
     </div>
 
     <!-- Naver Developers에서 발급받은 네이버지도 Application Key 입력  -->
     <script type="text/javascript"
             src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=3hxpwhkwla"></script>
 
+
     <script>
 
         function find_loc() {
             findMapTest()
-            makeMapList()
+
         }
 
         var mapOptions = {
@@ -213,6 +235,7 @@
                             }
 
                             searchPubTransPathAJAX(sx, sy, ex, ey);
+                            getInfo(sx, sy, ex, ey);
 
                         }
 
@@ -227,10 +250,43 @@
             }
         }
 
-        function makeMapList() {
+        let m = 1;
+
+        function getInfo(sx, sy, ex, ey) {
+            var xhr = new XMLHttpRequest();
+            //ODsay apiKey 입력
+            var url = "https://api.odsay.com/v1/api/searchPubTransPath?SX=" + sx + "&SY=" + sy + "&EX=" + ex + "&EY=" + ey + "&apiKey=zZOOCFJaccyfaXpDSn6kJaK%2BV5CTfh4tdW7Bp4Mg2Jo";
+            xhr.open("GET", url, true);
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    for (let i = 0; i < ((JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"]).length; i++) {
+
+                        if ((JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["trafficType"] == 1) {
+                            console.log(m + '번째 =', (JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["startName"] + '-->'
+                                + (JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["endName"],
+                                '(지하철 ' + (JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["lane"][0]["name"] + ')')
+                            m++;
+                        } else if ((JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["trafficType"] == 2) {
+                            console.log(m + '번째 =', (JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["startName"] + '-->'
+                                + (JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["endName"],
+                                '(버스 ' + (JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["lane"][0]["busNo"] + '번)')
+                            m++;
+                        } else {
+                            if ((JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["sectionTime"] == 0) {
+                                console.log('(환승)')
+                            } else {
+                                console.log(m + '번째 = 도보로 이동', '(' + (JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["sectionTime"] + '분 소요)')
+                                m++;
+                            }
+                        }
+
+
+                    }
+                }
+            }
 
         }
-
 
         function searchPubTransPathAJAX(sx, sy, ex, ey) {
             var xhr = new XMLHttpRequest();

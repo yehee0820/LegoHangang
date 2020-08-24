@@ -34,28 +34,26 @@
 
         function showMyPlace() {
             $.ajax({
-                type: 'POST',
-                url: 'https://pcmap-api.place.naver.com/graphql',
-                data: {},
-                success: function (data) {
+                    type: 'POST',
+                    url: 'https://pcmap-api.place.naver.com/graphql',
+                    data: {},
+                    success: function (data) {
 
-                    console.log(JSON.stringify(data));
+                        console.log(JSON.stringify(data));
 
-                   // PlaceToGo(image, name, loc, time, comment, url);
-                    //아래랑 변수 순서 똑같이 해줘야 한다!
+                        // PlaceToGo(image, name, loc, time, comment, url);
+                        //아래랑 변수 순서 똑같이 해줘야 한다!
 
-                },
+                    },
 
-                error: function (data) {
+                    error: function (data) {
 
-                    console.log(JSON.stringify(data));
+                        console.log(JSON.stringify(data));
 
 
-
-            }
-        }
-
-        )
+                    }
+                }
+            )
         }
 
 
@@ -86,6 +84,9 @@
 
 </head>
 <body>
+
+<script src="/api_controller.js"></script>
+
 <div id=cards-box class="grid">
     <div class="grid__item">
         <div class="card"><img class="card__img"
