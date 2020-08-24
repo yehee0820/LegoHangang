@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <!-- Webpage Title -->
+    <title>주변 핫플</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    <link href="../static/place_css.css" rel="stylesheet">
+
+    <script>
+
+        $(document).ready(function () {
+            //우리가 실행하지 않아도 실행이 되는 함수!
+            console.log('페이지가 로딩되었습니다!');
+            $('#cards-box').empty();
+            showMyPlace();
+        })
+
+        #_pcmap_list_scroll_container > ul > li:nth-child(2) > div._1IVzZ > a > div._1JnOs > div > span._2EZQu
+        #_pcmap_list_scroll_container > ul > li:nth-child(1) > div._1IVzZ > a > div._1JnOs > div > span._2EZQu
+
+        function showMyPlace(){
+            $.ajax({
+                type:'GET',
+                url:'http://spartacodingclub.shop/post',
+                data:{},
+                success: function(response){
+                    let article=response['articles'];
+                    for(let i=0; i<article.length; i++){
+                        let image=article[i]['image'];
+                        let url=article[i]['url'];
+                        let title=article[i]['title'];
+                        let desc=article[i]['desc'];
+                        let comment=article[i]['comment'];
+
+                        makeCard(image, url, title, desc, comment);
+                        //아래랑 변수 순서 똑같이 해줘야 한다!
+                    }
+
+                }
+            })
+        }
+
+
+        function PlaceToGo(image, name, loc, time, comment, url) {
+            //카드를 만들어주는 함수
+            let card_html =
+                `
+                <div class="grid__item">
+        <div class="card"><img class="card__img"
+                               src="${image}"
+                               alt="Snowy Mountains">
+            <div class="card__content">
+                <h1 class="card__header">${name}</h1>
+                <p class="card__text"><strong>위 </strong>${loc} <br>
+                <strong>영업시간 </strong>${time} <br>
+                ${comment}</p>
+                <button href="${url}" class="card__btn">더 많은 정보<span>&rarr;</span></button>
+            </div>
+        </div>
+    </div>
+                `;
+            $('#cards-box').append(card_html);
+            //jQuery 문법의 일종
+            // 백 quotation 사용 (키보드에서 1 왼쪽)
+            // ${}: {}안의 변수를 바로 사용할 수 있다
+        }
+    </script>
+
+</head>
+<body>
+<div id=cards-box class="grid">
+    <div class="grid__item">
+        <div class="card"><img class="card__img"
+                               src="#"
+                               alt="Snowy Mountains">
+            <div class="card__content">
+                <h1 class="card__header">A starry night</h1>
+                <p class="card__text">Look up at the night sky, and find yourself <strong>immersed</strong> in the
+                    amazing mountain range of Aspen. </p>
+                <button class="card__btn">Explore <span>&rarr;</span></button>
+            </div>
+        </div>
+    </div>
+    <div class="grid__item">
+        <div class="card"><img class="card__img"
+                               src="#"
+                               alt="Desert">
+            <div class="card__content">
+                <h1 class="card__header">Misty mornings</h1>
+                <p class="card__text">Capture the stunning <strong>essence</strong> of the early morning sunrise in the
+                    Californian wilderness.</p>
+                <button class="card__btn">Explore <span>&rarr;</span></button>
+            </div>
+        </div>
+    </div>
+    <div class="grid__item">
+        <div class="card"><img class="card__img"
+                               src="#"
+                               alt="Canyons">
+            <div class="card__content">
+                <h1 class="card__header">Utah sunsets</h1>
+                <p class="card__text">Sunsets over the <strong>stunning</strong> Utah Canyonlands, is truly something
+                    much more than incredible.</p>
+                <button class="card__btn">Explore <span>&rarr;</span></button>
+            </div>
+        </div>
+    </div>
+     <div class="grid__item">
+        <div class="card"><img class="card__img"
+                               src="#"
+                               alt="Snowy Mountains">
+            <div class="card__content">
+                <h1 class="card__header">A starry night</h1>
+                <p class="card__text">Look up at the night sky, and find yourself <strong>immersed</strong> in the
+                    amazing mountain range of Aspen. </p>
+                <button class="card__btn">Explore <span>&rarr;</span></button>
+            </div>
+        </div>
+    </div>
+    <div class="grid__item">
+        <div class="card"><img class="card__img"
+                               src="#"
+                               alt="Desert">
+            <div class="card__content">
+                <h1 class="card__header">Misty mornings</h1>
+                <p class="card__text">Capture the stunning <strong>essence</strong> of the early morning sunrise in the
+                    Californian wilderness.</p>
+                <button class="card__btn">Explore <span>&rarr;</span></button>
+            </div>
+        </div>
+    </div>
+    <div class="grid__item">
+        <div class="card"><img class="card__img"
+                               src="#"
+                               alt="Canyons">
+            <div class="card__content">
+                <h1 class="card__header">Utah sunsets</h1>
+                <p class="card__text">Sunsets over the <strong>stunning</strong> Utah Canyonlands, is truly something
+                    much more than incredible.</p>
+                <button class="card__btn">Explore <span>&rarr;</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

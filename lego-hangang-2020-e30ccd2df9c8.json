@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "lego-hangang-2020",
+  "private_key_id": "e30ccd2df9c873d5c5ba0e0a81131798a1a263fc",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCvUHRONrzJS4ol\nC8NSKutIbCodZdngBbk2+GGYctVqdby6BrCMMywHrCbxJM/vSXuHkx+dzqHfExLk\nm8Wx3rRssAEIM2ahi88lXFrZBEZzWLQ3pZK0HWgQFPJFIAkQqf1OCCt3KHZDsA3I\n/TUKOXFD33Glq1oTu8+COiCgxeEKXL69o9cYcQUq2XrtNDBgIhGj0bvkiJiuVx+s\nrs+MWsPXSG+7gXdp+dTjPPLarVwqorDNSATF2JLU5XOazam/HW1x/7DvWuwPBqAH\nlTpDuOYxC7DncDUjgjuNtPU2MUbeGSX9LxkFe+H170Byy1XtW35g8G1O+tbA6iD7\nKE4hBs6vAgMBAAECggEAF7YqBOoiXpd498m/gT2M1R7ME23TKhmcE3NEv/nII74I\n6KA/ALdrHR6LpdH0zciCjLO5cv6fpixOQd1Pv97/SDQF77YEC5V9TvBO2Utau/8j\nYONkFDhl+sbafb73eumC+Srhthwi4sTNGIImyls6lpOCK4YhiMm+Jz71aslYxq3L\nQ8TX7xf2YQRl8p3/nnR9jj3Zrm8NnYv7sFYWluYGV+qaebIOFakzuUQFVlb+khrV\nLdDDVuuXGAA/E++K+iiMIJV8+ngi93bfj5T4SPb1wOs1RH86IadoZXkTaRKweVPC\n4LY/WmaPPpKbcz5rCJzwIbc5eQe3Qw/1SWBveutUAQKBgQDcrLtqXg4oOLdmZc91\nsZlwSp95CoY/lNs0TBnzaKMzER9MbXfC3z5Zs+vDOX4asXFffgZ1ecwIhITiGkhN\nxh8akH6gokhSLeiq2UsV7uXx5PYLyAfQfW17MuRgt1efmG9HKvHAcrL+xJ48x+F/\nEOi4MmgPV+i3vsdds1jmpC5y8QKBgQDLYNjWbxFgYhxVe0PbIXn1Xt/HlHFdW0lI\n05dutdYktByXoNpY0xIVc/II+gM3C2eiY2qnGqLHNObVTx3hsx2QiajfyE3Sunqi\nvd61fQxKezC62YB2LtD+09dBQa16kGaDqNmIJnvmvb1RIWL1KABiaItHUK7DM9Va\nHZgoxu4bnwKBgHEbW+hWEx2MjHxAnMgvYn0K0phgy5SVQJGanAaF0HhhQ1CSHztT\n34pszN/AfSFDZ9/RIZBfADQxcEbPv9WVQeYEv9Knuzfb7hB71Z+FVnjYqUA6o766\nOz5VRHdKIfBcWlT47vZ8E8C/mHeA39SYHyAiPfH3VgGwGFGvllaJOoGRAoGAESbW\nwqbVSVKc3xypKVbWaToaF0POl7f2Iz0s/To6mBfUfXkkUO9kDAkeNWGYWdENaWWG\n/hbB+ZjdisnEVF99s83YPx8uaQIvC4CFwrqMCc//2RI0wkLKf2MwOSGn1rlM2/em\neNP+CQShbbEqHlDET4hPjrEgO/goGxR5256DQDMCgYA77J3NkdOmIM20+UyjsHaK\nWiTFeJ1Gl8GFtEsvrfMMUoqQZKzVZWNI7LJgqJswfsAjAJwjP9pcaUxZ9jhY4k+7\nJpNq/d/TaADlAVRZ2ABPxhOQGA/pBADM8yqiZ+O3VVRaIvjO4ZBATBGtoJDiHiFj\n3TFhr/jIZqWlbSzCcOXxWA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "auth-820@lego-hangang-2020.iam.gserviceaccount.com",
+  "client_id": "110572435046002429255",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/auth-820%40lego-hangang-2020.iam.gserviceaccount.com"
+}

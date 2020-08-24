@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <!-- Webpage Title -->
+    <title>주변 핫플</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    <link href="../static/place_css.css" rel="stylesheet">
+
+    <style type="text/css">
+
+        .wrap {
+            width: 900px;
+            margin: auto;
+        }
+
+        .comment {
+            color: #3d3d3d;
+            font-weight: normal;
+        }
+
+        #post-box {
+            width: 500px;
+            margin: 20px auto;
+            padding: 50px;
+            border-style: solid;
+            border-image: linear-gradient(60deg, #abecd6 0%, #fbed96 100%);
+            border-image-slice: 1;
+            border-image-width: 10px;
+            box-shadow: 10px 10px 10px 10px gainsboro;
+        }
+
+        label {
+            display: block;
+            font: 1rem 'Fira Sans', sans-serif;
+        }
+
+        input,
+        label {
+            margin: .4rem 0;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () {
+            $("#cards-box").html("");
+            showArticles();
+        });
+
+        function openClose() {
+            // id 값 post-box의 display 값이 block 이면(= 눈에 보이면)
+            if ($("#post-box").css("display") == "block") {
+                // post-box를 가리고
+                $("#post-box").hide();
+                // 다시 버튼을 클릭하면, 박스 열기를 할 수 있게 텍스트 바꿔두기
+                $("#btn-post-box").text("포스팅 박스 열기");
+            } else {
+                // 아니면(눈에 보이지 않으면) post-box를 펴라
+                $("#post-box").show();
+                // 다시 버튼을 클릭하면, 박스 닫기를 할 수 있게 텍스트 바꿔두기
+                $("#btn-post-box").text("포스팅 박스 닫기");
+            }
+        }
+
+        function postArticle() {
+            let nickname = $("#post-nickname").val();
+            let title = $("#post-title").val();
+            let parkLoc = $("#post-location").val();
+            let img = $("#post-img").val()
+            let comment = $("#post-comment").val();
+
+
+            // 2. memo에 POST 방식으로 메모 생성 요청하기
+            $.ajax({
+                type: "POST",
+                url: "/date",
+                data: {nickname, title, parkLoc, img, comment}, // 데이터를 주는 방법
+                success: function (response) { // 성공하면
+                    if (response["result"] == "success") {
+                        alert("포스팅 성공!");
+                        // 3. 성공 시 페이지 새로고침하기
+                        window.location.reload();
+                    } else {
+                        alert("서버 오류!")
+                    }
+                }
+            })
+        }
+
+        function showArticles() {
+            $.ajax({
+                type: "GET",
+                url: "/date",
+                data: {},
+                success: function (response) {
+                    let reviews = response["reviews"];
+                    console.log(reviews);
+                    for (let i = 0; i < reviews.length; i++) {
+                        makeCard(reviews[i]["title"], reviews[i]["nickname"], reviews[i]["parkLoc"], reviews[i]["img"], reviews[i]["comment"]);
+                    }
+                }
+            })
+        }
+
+        function makeCard(title, nickname, parkLoc, img, comment) {
+            let tempHtml = `<div class="card">
+                        <div class="card-body">
+                        <a class="card-title">${title}</a>
+                        <p class="card-text nickname">${nickname}</p>
+                        <p class="card-text">${parkLoc}</p>
+                        <p class="card-img">${img}</p>
+                        <p class="card-text comment">${comment}</p>
+                        </div>
+                    </div>`;
+            $("#cards-box").append(tempHtml);
+
+        }
+    </script>
+
+</head>
+
+<body>
+
+<div class="wrap">
+    <div class="jumbotron">
+        <h1 class="display-4">데이트 코스 추천</h1>
+        <p class="lead">여러 한강공원에서의 데이트 코스, 맛집, 공원 시설 등에 대한 리뷰를 공유하는 공간입니다.</p>
+        <hr class="my-4">
+        <p class="lead">
+            <button onclick="openClose()" id="btn-post-box" type="button" class="btn btn-primary">포스팅 박스 열기
+            </button>
+        </p>
+    </div>
+    <div id="post-box" class="form-post" style="display:none">
+        <div>
+            <div class="form-group">
+                <label for="post-nickname">닉네임</label>
+                <input id="post-nickname" class="form-control" placeholder="">
+            </div>
+            <div class="form-group">
+                <label for="post-title">리뷰 제목</label>
+                <input id="post-title" class="form-control" rows="2">
+            </div>
+            <div class="form-group">
+                <label for="post-location">어디?</label>
+                <select id="post-location" class="custom-select" aria-label="Example select with button addon" rows="2">
+                    <option selected>어느 지역에 대한 리뷰인가요?</option>
+                    <option value="1">여의도</option>
+                    <option value="2">난지</option>
+                    <option value="3">뚝섬</option>
+                    <option value="4">광나루</option>
+                    <option value="5">강서</option>
+                    <option value="6">잠실</option>
+                    <option value="7">망원</option>
+                    <option value="8">양화</option>
+                    <option value="9">이촌</option>
+                    <option value="10">잠원</option>
+                    <option value="11">반포</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="post-img">Choose a profile picture:</label>
+
+                <input type="file"
+                       id="post-img" class="form-control-file"
+                       accept="image/png, image/jpeg">
+            </div>
+            <div class="form-group">
+                <label for="post-comment">간단 코멘트</label>
+                <textarea id="post-comment" class="form-control" rows="7"></textarea>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="postArticle()">리뷰 등록</button>
+        </div>
+    </div>
+    <div id="cards-box" class="card-columns">
+        <div class="card">
+            <div class="card-body">
+                <a class="card-title">제목</a>
+                <p class="card-text nickname">닉네임</p>
+                <div class="card-body">
+
+                    <p class="card-text">한강주소</p>
+                    <p class="card-text comment">코멘트</p>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <img class="card-img-top"
+                 src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
+                 alt="Card image cap">
+            <div class="card-body">
+                <a class="card-title">여기 기사 제목이 들어가죠</a>
+                <p class="card-text">기사의 요약 내용이 들어갑니다. 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산...</p>
+                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
+            </div>
+        </div>
+        <div class="card">
+            <img class="card-img-top"
+                 src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
+                 alt="Card image cap">
+            <div class="card-body">
+                <a href="#" class="card-title">여기 기사 제목이 들어가죠</a>
+                <p class="card-text">기사의 요약 내용이 들어갑니다. 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산...</p>
+                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
+            </div>
+        </div>
+        <div class="card">
+            <img class="card-img-top"
+                 src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
+                 alt="Card image cap">
+            <div class="card-body">
+                <a href="#" class="card-title">여기 기사 제목이 들어가죠</a>
+                <p class="card-text">기사의 요약 내용이 들어갑니다. 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산...</p>
+                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
+            </div>
+        </div>
+        <div class="card">
+            <img class="card-img-top"
+                 src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
+                 alt="Card image cap">
+            <div class="card-body">
+                <a href="#" class="card-title">여기 기사 제목이 들어가죠</a>
+                <p class="card-text">기사의 요약 내용이 들어갑니다. 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산...</p>
+                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
+            </div>
+        </div>
+        <div class="card">
+            <img class="card-img-top"
+                 src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
+                 alt="Card image cap">
+            <div class="card-body">
+                <a href="#" class="card-title">여기 기사 제목이 들어가죠</a>
+                <p class="card-text">기사의 요약 내용이 들어갑니다. 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산...</p>
+                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
+            </div>
+        </div>
+        <div class="card">
+            <img class="card-img-top"
+                 src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
+                 alt="Card image cap">
+            <div class="card-body">
+                <a href="#" class="card-title">여기 기사 제목이 들어가죠</a>
+                <p class="card-text">기사의 요약 내용이 들어갑니다. 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산...</p>
+                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

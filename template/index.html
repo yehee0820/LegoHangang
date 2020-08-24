@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="ko">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.1.1">
+    <title>Lego, Hangang ㅣ 한강의 모든 것</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/carousel/">
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous">
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    <!--article card java-->
+    <script>window.jQuery || document.write('<script src="../static/jquery.slim.min.js"><\/script>')</script>
+    <script src="../static/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <!-- Custom styles for this template -->
+    <link href="../static/carousel.css" rel="stylesheet">
+
+    <!--navbar javascript-->
+    <script>
+        $(document).ready(function () {
+            $('#navbarDropdown').mouseenter(function () {
+                $('.dropdown-menu').slideToggle(300, "linear");
+            });
+
+            $('.dropdown-menu').mouseleave(function () {
+                $(this).slideToggle(300, "linear");
+            });
+        });
+    </script>
+
+    <script>
+        Vue.config.devtools = true;
+
+        Vue.component('card', {
+            template: `
+    <div class="card-wrap"
+      @mousemove="handleMouseMove"
+      @mouseenter="handleMouseEnter"
+      @mouseleave="handleMouseLeave"
+      ref="card">
+      <div class="card"
+        :style="cardStyle">
+        <div class="card-bg" :style="[cardBgTransform, cardBgImage]"></div>
+        <div class="card-info">
+          <slot name="header"></slot>
+          <slot name="content"></slot>
+        </div>
+      </div>
+    </div>`,
+            mounted() {
+                this.width = this.$refs.card.offsetWidth;
+                this.height = this.$refs.card.offsetHeight;
+            },
+            props: ['dataImage'],
+            data: () => ({
+                width: 0,
+                height: 0,
+                mouseX: 0,
+                mouseY: 0,
+                mouseLeaveDelay: null
+            }),
+
+            computed: {
+                mousePX() {
+                    return this.mouseX / this.width;
+                },
+                mousePY() {
+                    return this.mouseY / this.height;
+                },
+                cardStyle() {
+                    const rX = this.mousePX * 30;
+                    const rY = this.mousePY * -30;
+                    return {
+                        transform: `rotateY(${rX}deg) rotateX(${rY}deg)`
+                    };
+
+                },
+                cardBgTransform() {
+                    const tX = this.mousePX * -40;
+                    const tY = this.mousePY * -40;
+                    return {
+                        transform: `translateX(${tX}px) translateY(${tY}px)`
+                    };
+
+                },
+                cardBgImage() {
+                    return {
+                        backgroundImage: `url(${this.dataImage})`
+                    };
+
+                }
+            },
+
+            methods: {
+                handleMouseMove(e) {
+                    this.mouseX = e.pageX - this.$refs.card.offsetLeft - this.width / 2;
+                    this.mouseY = e.pageY - this.$refs.card.offsetTop - this.height / 2;
+                },
+                handleMouseEnter() {
+                    clearTimeout(this.mouseLeaveDelay);
+                },
+                handleMouseLeave() {
+                    this.mouseLeaveDelay = setTimeout(() => {
+                        this.mouseX = 0;
+                        this.mouseY = 0;
+                    }, 1000);
+                }
+            }
+        });
+
+        const app = new Vue({
+            el: '#app'
+        });
+    </script>
+
+</head>
+
+<body>
+<header>
+    <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-custom-2">
+        <div class="container">
+            <a class="navbar-brand" href="#" target="_self">
+                <strong>Lego, Hangang</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" target="_self">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" target="_self" role="button"
+                           data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">공원별정보</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">위치</a>
+                            <a class="dropdown-item" href="#">자전거 대여</a>
+                            <a class="dropdown-item" href="#">기상 정보</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">배달/대여</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">주변핫플찾기</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">feedback</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main role="main">
+
+    <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner" data-interval="2000">
+
+            <div class="carousel-item active">
+                <img src="../static/images/main/hangangmain.JPG"
+                     class="d-block w-100" alt="hangang">
+                <div class="wrapper">
+
+                    <div class="carousel-caption text-center">
+                        <div class="typing-demo">
+                            <h1>The happiest moment at Hangang river</h1>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="../static/images/main/sky.jpeg"
+                     class="d-block w-100" alt="sky">
+                <div class="container">
+                    <div class="carousel-caption text-center">
+                        <div class="typing-demo">
+                        <h1>Everything you're looking for</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="../static/images/main/picnic.jpeg"
+                     class="d-block w-100" alt="picnic">
+                <div class="container">
+                    <div class="carousel-caption text-center">
+                        <div class="typing-demo">
+                            <h1>The happiest moment at Hangang river</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Marketing messaging and featurettes
+    ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+
+
+    <!--cards-->
+    <div class="info_card">
+        <ul class="cards">
+            <li class="cards__item">
+                <div class="card">
+                    <div class="card__image card__image--fence"></div>
+                    <div class="card__content">
+                        <div class="card__title">공원 별 정보</div>
+                        <p class="card__text">위치와 같은 기본정보부터 자전거 대여 / 기상정보와 같은 한강나들이에 필요한 다양한 정보를 제공합니다. 공원 별 자전거 대여소의
+                            위치를 현 위치에서 확인 가능하며 오늘 한강공원의 체감온도와 불쾌지수 등을 알 수 있습니다.</p>
+                        <button class="btn btn--block btn-1">Let's go</button>
+                    </div>
+                </div>
+            </li>
+            <li class="cards__item">
+                <div class="card">
+                    <div class="card__image card__image--river"></div>
+                    <div class="card__content">
+                        <div class="card__title">배달음식 및 대여 정보</div>
+                        <p class="card__text">한강에 친구들과 가면 "우리 뭐 먹지?"라는 고민을 가장 먼저 하게 됩니다. 이 페이지에서 어떤 음식을 배달해 먹으면 좋을지
+                            정해보세요! 또한 피크닉 세트를 대여할 수 있는 주변 카페의 정보도 알려줍니다.</p>
+                        <button class="btn btn--block btn-2">Let's go</button>
+                    </div>
+                </div>
+            </li>
+            <li class="cards__item">
+                <div class="card">
+                    <div class="card__image card__image--record"></div>
+                    <div class="card__content">
+                        <div class="card__title">공원 주변 핫플레이스</div>
+                        <p class="card__text">공원에서 다른 곳으로 가고 싶거나 갑자기 비가 올 때, 어떻게 해야 할까요? 해당 공원 주변에 인기있는 맛집, 카페 그리고 실내
+                            데이트 장소들을 추천해드립니다.</p>
+                        <button class="btn btn--block btn-3">Let's go</button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!--end-->
+
+    <hr class="featurette-divider">
+    <hr class="featurette-divider">
+
+
+    <!-- START THE FEATURETTES -->
+
+    <!--        <hr class="featurette-divider">-->
+
+    <!--        <div class="row featurette">-->
+    <!--            <div class="col-md-7">-->
+    <!--                <h2 class="featurette-heading">First featurette heading. <span-->
+    <!--                        class="text-muted">It’ll blow your mind.</span></h2>-->
+    <!--                <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis-->
+    <!--                    euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus,-->
+    <!--                    tellus ac cursus commodo.</p>-->
+    <!--            </div>-->
+    <!--            <div class="col-md-5">-->
+    <!--                <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500"-->
+    <!--                     height="500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"-->
+    <!--                     focusable="false" role="img" aria-label="Placeholder: 500x500"><title>Placeholder</title>-->
+    <!--                    <rect width="100%" height="100%" fill="#eee"/>-->
+    <!--                    <text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text>-->
+    <!--                </svg>-->
+    <!--            </div>-->
+    <!--        </div>-->
+
+    <!--        <hr class="featurette-divider">-->
+
+    <!--        <div class="row featurette">-->
+    <!--            <div class="col-md-7 order-md-2">-->
+    <!--                <h2 class="featurette-heading">Oh yeah, it’s that good. <span-->
+    <!--                        class="text-muted">See for yourself.</span></h2>-->
+    <!--                <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis-->
+    <!--                    euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus,-->
+    <!--                    tellus ac cursus commodo.</p>-->
+    <!--            </div>-->
+    <!--            <div class="col-md-5 order-md-1">-->
+    <!--                <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500"-->
+    <!--                     height="500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"-->
+    <!--                     focusable="false" role="img" aria-label="Placeholder: 500x500"><title>Placeholder</title>-->
+    <!--                    <rect width="100%" height="100%" fill="#eee"/>-->
+    <!--                    <text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text>-->
+    <!--                </svg>-->
+    <!--            </div>-->
+    <!--        </div>-->
+
+    <!--        <hr class="featurette-divider">-->
+
+    <!--        <div class="row featurette">-->
+    <!--            <div class="col-md-7">-->
+    <!--                <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>-->
+    <!--                <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis-->
+    <!--                    euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus,-->
+    <!--                    tellus ac cursus commodo.</p>-->
+    <!--            </div>-->
+    <!--            <div class="col-md-5">-->
+    <!--                <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500"-->
+    <!--                     height="500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"-->
+    <!--                     focusable="false" role="img" aria-label="Placeholder: 500x500"><title>Placeholder</title>-->
+    <!--                    <rect width="100%" height="100%" fill="#eee"/>-->
+    <!--                    <text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text>-->
+    <!--                </svg>-->
+    <!--            </div>-->
+    <!--        </div>-->
+
+    <!--        <hr class="featurette-divider">-->
+
+    <!-- /END THE FEATURETTES -->
+    </div><!-- /.container -->
+
+
+    <!-- Footer -->
+
+    <div class="main"></div>
+    <div class="footer">
+        <div class="bubbles">
+            <div class="bubble"
+                 style="--size:3.487550578530864rem; --distance:6.272415252290322rem; --position:95.092714025204%; --time:3.769861246533877s; --delay:-3.319228085368326s;"></div>
+            <div class="bubble"
+                 style="--size:2.742149064621933rem; --distance:6.732529001795541rem; --position:91.82744343082153%; --time:2.4107150986526236s; --delay:-3.425793978655862s;"></div>
+            <div class="bubble"
+                 style="--size:5.53377026362565rem; --distance:9.855689828128252rem; --position:44.8851134368176%; --time:2.160209318953205s; --delay:-3.1780943780427475s;"></div>
+            <div class="bubble"
+                 style="--size:2.051291229220986rem; --distance:8.075306924657013rem; --position:40.79512975847775%; --time:2.199598066327456s; --delay:-3.8144859330445873s;"></div>
+            <div class="bubble"
+                 style="--size:4.580561796049854rem; --distance:8.993465399269294rem; --position:59.37298555517191%; --time:3.303244244845912s; --delay:-3.131357345558128s;"></div>
+            <div class="bubble"
+                 style="--size:3.4565075304374693rem; --distance:8.958973924949454rem; --position:96.72134345903116%; --time:3.87396329476271s; --delay:-3.7869629635190325s;"></div>
+            <div class="bubble"
+                 style="--size:5.847646708330295rem; --distance:7.603602625702525rem; --position:81.72203044562958%; --time:3.6814824270859834s; --delay:-3.1902986827263082s;"></div>
+            <div class="bubble"
+                 style="--size:5.34366970253124rem; --distance:8.225323088107341rem; --position:60.797914703071655%; --time:2.153480772801395s; --delay:-2.350346243343914s;"></div>
+            <div class="bubble"
+                 style="--size:2.141958814875653rem; --distance:7.864491616595654rem; --position:86.65675324109506%; --time:3.8924964220558764s; --delay:-2.322104944180188s;"></div>
+            <div class="bubble"
+                 style="--size:2.6292695761835834rem; --distance:6.795273400105008rem; --position:0.6451964501673269%; --time:3.767202345615204s; --delay:-3.900005843621132s;"></div>
+            <div class="bubble"
+                 style="--size:2.668315521946547rem; --distance:6.219460412838233rem; --position:44.56877441742461%; --time:3.18350026958567s; --delay:-3.692163762375958s;"></div>
+            <div class="bubble"
+                 style="--size:5.364969061220033rem; --distance:8.142349017546097rem; --position:104.69545831702683%; --time:3.491172023613029s; --delay:-2.622803462829554s;"></div>
+            <div class="bubble"
+                 style="--size:5.228358864752673rem; --distance:9.632037358987079rem; --position:71.10365930686815%; --time:3.141602705517541s; --delay:-2.5732933081330005s;"></div>
+            <div class="bubble"
+                 style="--size:5.730521301746779rem; --distance:9.971306013938484rem; --position:55.21412579685462%; --time:2.460221596888576s; --delay:-3.5194831981380923s;"></div>
+            <div class="bubble"
+                 style="--size:3.307691892897404rem; --distance:8.343722351248779rem; --position:66.77629373036571%; --time:2.151094944811175s; --delay:-2.752764184052907s;"></div>
+            <div class="bubble"
+                 style="--size:4.74433463193838rem; --distance:7.408569615100331rem; --position:55.48279668245226%; --time:2.9949902684864163s; --delay:-2.739004057885s;"></div>
+            <div class="bubble"
+                 style="--size:5.24379726934578rem; --distance:6.031678473655036rem; --position:-0.8796031190475944%; --time:3.5357670327861253s; --delay:-3.562886242806011s;"></div>
+            <div class="bubble"
+                 style="--size:2.409030002928425rem; --distance:6.351655849494214rem; --position:78.27573755391586%; --time:2.5386599486120165s; --delay:-2.1709148074358358s;"></div>
+            <div class="bubble"
+                 style="--size:4.489495254317843rem; --distance:6.818998744624427rem; --position:63.60578567885456%; --time:2.5199880388638545s; --delay:-2.3013317545065317s;"></div>
+            <div class="bubble"
+                 style="--size:2.749560974334676rem; --distance:9.839182847877286rem; --position:69.68859212406277%; --time:3.7521180437269446s; --delay:-2.8005528859207405s;"></div>
+            <div class="bubble"
+                 style="--size:3.673270667288249rem; --distance:6.69308048711677rem; --position:26.616414354014474%; --time:2.1381865632691905s; --delay:-3.8970688981623836s;"></div>
+            <div class="bubble"
+                 style="--size:3.8173335030187188rem; --distance:7.086496716521556rem; --position:8.266079454234614%; --time:3.367342461204879s; --delay:-3.987505271784953s;"></div>
+            <div class="bubble"
+                 style="--size:4.242449698794253rem; --distance:9.553977762514444rem; --position:77.40351209113102%; --time:2.8791733199985097s; --delay:-3.285308699861539s;"></div>
+            <div class="bubble"
+                 style="--size:3.6850308177226863rem; --distance:8.877647622433498rem; --position:26.56872944764926%; --time:3.4260619355854076s; --delay:-2.711869631835116s;"></div>
+            <div class="bubble"
+                 style="--size:5.393429854377116rem; --distance:6.105921992947145rem; --position:100.60088492836543%; --time:3.415098055521984s; --delay:-2.345169261292399s;"></div>
+            <div class="bubble"
+                 style="--size:2.3795206570444787rem; --distance:9.195078358233427rem; --position:76.16300166192491%; --time:2.575778776010327s; --delay:-3.375241821020503s;"></div>
+            <div class="bubble"
+                 style="--size:2.7539652771409235rem; --distance:6.912187923022948rem; --position:71.61366572916633%; --time:2.5431837566830158s; --delay:-3.3517433058572643s;"></div>
+            <div class="bubble"
+                 style="--size:2.469338876276841rem; --distance:6.515258587823609rem; --position:93.9419309036538%; --time:2.692190555986184s; --delay:-3.6730805421161836s;"></div>
+            <div class="bubble"
+                 style="--size:4.50184834355842rem; --distance:7.267197742259193rem; --position:51.03954071955707%; --time:3.7497978327286874s; --delay:-3.385568362458199s;"></div>
+            <div class="bubble"
+                 style="--size:3.481381029690307rem; --distance:9.669689665148166rem; --position:87.66202006846218%; --time:2.613642562128499s; --delay:-2.0201169510799497s;"></div>
+            <div class="bubble"
+                 style="--size:2.8886251277180026rem; --distance:7.576949328299666rem; --position:21.412568307694897%; --time:3.250599616698609s; --delay:-3.9270716717056113s;"></div>
+            <div class="bubble"
+                 style="--size:3.900546967710561rem; --distance:6.5943806888847725rem; --position:51.82782226694375%; --time:2.8473009599789005s; --delay:-2.7732924323642467s;"></div>
+            <div class="bubble"
+                 style="--size:3.6221310670925106rem; --distance:6.855466938724793rem; --position:16.10035198269817%; --time:2.4595287418527647s; --delay:-2.2039654420857095s;"></div>
+            <div class="bubble"
+                 style="--size:5.129841160265175rem; --distance:8.214948123010334rem; --position:55.93723250602307%; --time:2.825181344114592s; --delay:-3.1085935623008205s;"></div>
+        </div>
+        <div class="content">
+            <div>
+                <div><b>Developer </b><a href="https://www.instagram.com/yeahjjang">instagram</a><a
+                        href="https://velog.io/@yeahjjang"> velog</a><a href="#">yehee0820@ewhain.net</a></div>
+                <div><b>2020.08.</b></div>
+                <div><b>Links</b><a href="#">Hangang.seoul.go.kr</a><a href="#">weather.go.kr</a><a
+                        href="https://www.spartacodingclub.com">Sparta Coding club</a></div>
+
+            </div>
+            <hr class="featurette-divider">
+        </div>
+    </div>
+    <svg style="position:fixed; top:100vh">
+        <defs>
+            <filter id="blob">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur"></feGaussianBlur>
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9"
+                               result="blob"></feColorMatrix>
+                <feComposite in="SourceGraphic" in2="blob" operator="atop"></feComposite>
+            </filter>
+        </defs>
+    </svg>
+
+</main>
+
+</body>
+</html>
+
