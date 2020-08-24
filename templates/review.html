@@ -20,11 +20,31 @@
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
 
-    <link href="../static/place_css.css" rel="stylesheet">
+    <link href="../static/navbar.css" rel="stylesheet">
 
     <style type="text/css">
 
+        #btn-post-box {
+            background-color: steelblue;
+            border-color: #f0f0f0;
+        }
+
+        #btn-review-upload {
+            background-color: lightslategray;
+            border-color: #f0f0f0;
+        }
+
+        body {
+            padding-top: 1em;
+            padding-bottom: 1em;
+            display: grid;
+            background: whitesmoke;
+            min-height: 90vh;
+            font-family: 'Open Sans', sans-serif;
+        }
+
         .wrap {
+
             width: 900px;
             margin: auto;
         }
@@ -35,9 +55,10 @@
         }
 
         #post-box {
-            width: 500px;
-            margin: 20px auto;
-            padding: 50px;
+            width: 400px;
+            margin: 10px auto;
+            padding: 20px;
+            font-size: small;
             border-style: solid;
             border-image: linear-gradient(60deg, #abecd6 0%, #fbed96 100%);
             border-image-slice: 1;
@@ -132,9 +153,66 @@
         }
     </script>
 
+    <!--navbar javascript-->
+    <script>
+        $(document).ready(function () {
+            $('#navbarDropdown').mouseenter(function () {
+                $('.dropdown-menu').slideToggle(300, "linear");
+            });
+
+            $('.dropdown-menu').mouseleave(function () {
+                $(this).slideToggle(300, "linear");
+            });
+        });
+    </script>
+
 </head>
 
 <body>
+
+<header>
+    <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-custom-2">
+        <div class="container">
+            <a class="navbar-brand" href="#" target="_self">
+                <strong>Lego, Hangang</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" target="_self">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" target="_self" role="button"
+                           data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">공원별정보</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">위치</a>
+                            <a class="dropdown-item" href="#">자전거 대여</a>
+                            <a class="dropdown-item" href="#">기상 정보</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">배달/대여</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">주변핫플찾기</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">feedback</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
 
 <div class="wrap">
     <div class="jumbotron">
@@ -157,7 +235,7 @@
                 <input id="post-title" class="form-control" rows="2">
             </div>
             <div class="form-group">
-                <label for="post-location">어디?</label>
+                <label for="post-location">장소</label>
                 <select id="post-location" class="custom-select" aria-label="Example select with button addon" rows="2">
                     <option selected>어느 지역에 대한 리뷰인가요?</option>
                     <option value="1">여의도</option>
@@ -174,7 +252,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="post-img">Choose a profile picture:</label>
+                <label for="post-img">업로드 할 사진을 선택해주세요: </label>
 
                 <input type="file"
                        id="post-img" class="form-control-file"
@@ -184,7 +262,7 @@
                 <label for="post-comment">간단 코멘트</label>
                 <textarea id="post-comment" class="form-control" rows="7"></textarea>
             </div>
-            <button type="button" class="btn btn-primary" onclick="postArticle()">리뷰 등록</button>
+            <button type="button" class="btn btn-primary" id="btn-review-upload" onclick="postArticle()">리뷰 등록</button>
         </div>
     </div>
     <div id="cards-box" class="card-columns">

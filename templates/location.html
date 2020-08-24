@@ -20,343 +20,423 @@
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
 
+    <link href="../static/navbar.css" rel="stylesheet">
+
+    <!--navbar javascript-->
+    <script>
+        $(document).ready(function () {
+            $('#navbarDropdown').mouseenter(function () {
+                $('.dropdown-menu').slideToggle(300, "linear");
+            });
+
+            $('.dropdown-menu').mouseleave(function () {
+                $(this).slideToggle(300, "linear");
+            });
+        });
+    </script>
+
+    <style>
+        body {
+            padding-top: 1em;
+            padding-bottom: 1em;
+            display: grid;
+            background: whitesmoke;
+            min-height: 90vh;
+            font-family: 'Open Sans', sans-serif;
+        }
+    </style>
+
 </head>
 
 <body>
-<hr class="featurette-divider">
-<div>
-<h3>현위치에서 한강으로 가는 길을 안내합니다. (위치정보 허용)</h3>
-</div>
+
+<header>
+    <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-custom-2">
+        <div class="container">
+            <a class="navbar-brand" href="#" target="_self">
+                <strong>Lego, Hangang</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" target="_self">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" target="_self" role="button"
+                           data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">공원별정보</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">위치</a>
+                            <a class="dropdown-item" href="#">자전거 대여</a>
+                            <a class="dropdown-item" href="#">기상 정보</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">배달/대여</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">주변핫플찾기</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">feedback</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
 
 <hr class="featurette-divider">
 
+<div class="wrap">
+    <div class="jumbotron">
+        <h1 class="display-4">길 찾기</h1>
+        <p class="lead">현위치에서 한강으로 가는 길을 안내합니다. (위치정보 허용)</p>
+        <hr class="my-4">
+        <div class="input-group">
+            <select class="custom-select" id="inputGroupSelect" aria-label="Example select with button addon">
+                <option selected>가고자 하는 한강공원을 선택하세요</option>
+                <option value="1">여의도한강공원</option>
+                <option value="2">난지한강공원</option>
+                <option value="3">뚝섬한강공원</option>
+                <option value="4">광나루한강공원</option>
+                <option value="5">강서한강공원</option>
+                <option value="6">잠실한강공원</option>
+                <option value="7">망원한강공원</option>
+                <option value="8">양화한강공원</option>
+                <option value="9">이촌한강공원</option>
+                <option value="10">잠원한강공원</option>
+                <option value="11">반포한강공원</option>
 
-<div class="input-group">
-    <select class="custom-select" id="inputGroupSelect" aria-label="Example select with button addon">
-        <option selected>가고자 하는 한강공원을 선택하세요</option>
-        <option value="1">여의도한강공원</option>
-        <option value="2">난지한강공원</option>
-        <option value="3">뚝섬한강공원</option>
-        <option value="4">광나루한강공원</option>
-        <option value="5">강서한강공원</option>
-        <option value="6">잠실한강공원</option>
-        <option value="7">망원한강공원</option>
-        <option value="8">양화한강공원</option>
-        <option value="9">이촌한강공원</option>
-        <option value="10">잠원한강공원</option>
-        <option value="11">반포한강공원</option>
 
-
-    </select>
-    <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" onclick="find_loc()">길찾기</button>
+            </select>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" onclick="find_loc()">길찾기</button>
+            </div>
+        </div>
     </div>
-</div>
-
-<div id="map" style="width:70%;height:400px;"></div>
-<!-- Naver Developers에서 발급받은 네이버지도 Application Key 입력  -->
-<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=3hxpwhkwla"></script>
-
-<script>
-
-    function find_loc(){
-        findMapTest()
-        makeMapList()
-    }
-
-	var mapOptions = {
-		center: new naver.maps.LatLng(37.3595704, 127.105399),
-		zoom: 10
-	};
-
-	var map = new naver.maps.Map('map', mapOptions);
-
-    let sx = 0;
-    let sy = 0;
-    let ex = 0;
-	let ey = 0;
 
 
-    function findMapTest() {
-        if (navigator.geolocation) { // GPS를 지원하면
-            navigator.geolocation.getCurrentPosition(function (position) {
-                user_latitude = position.coords.latitude;
-                user_longitude = position.coords.longitude;
+    <hr class="featurette-divider">
+<div id="result-box">
+    <div id="map" style="width:60%;height:400px;"></div>
+    <div id="show-info-box" style="height:400px; width:30%; place-items: flex-end">
+        <p>이동경로</p>
+        <p>환승역</p>
+        <p>소요시간</p>
+    </div>
+    </div>
+    <!-- Naver Developers에서 발급받은 네이버지도 Application Key 입력  -->
+    <script type="text/javascript"
+            src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=3hxpwhkwla"></script>
 
-                $.ajax({
-                    type: 'POST',
-                    url: '/get_location',
-                    data: {
-                        user_latitude: user_latitude, user_longitude: user_longitude
-                    },
-                    success: function (response) {
-                            sx=response['result']['SX']
-                        sy=response['result']['SY']
-                        console.log(sx)
-                        console.log(sy)
-                        loc = $("#inputGroupSelect").val()
-                        if (loc == 1) {
-                            ey = 37.528538;
-                            ex = 126.934312;
-                        }else if (loc == 2) {
-                            ey = 37.566273;
-                            ex = 126.876260;
-                        }else if (loc == 3) {
-                            ey = 37.529341;
-                            ex = 127.071357;
-                        }else if (loc == 4) {
-                            ey = 37.549213;
-                            ex = 127.119979;
-                        }else if (loc == 5) {
-                            ey = 37.588483;
-                            ex = 126.815225;
-                        }else if (loc == 6) {
-                            ey = 37.518070;
-                            ex = 127.081879;
-                        }else if (loc == 7) {
-                            ey = 37.555939;
-                            ex = 126.894570;
-                        }else if (loc == 8) {
-                            ey = 37.538522;
-                            ex = 126.902319;
-                        }else if (loc == 9) {
-                            ey = 37.524391;
-                            ex = 126.953173;
-                        }else if (loc == 10) {
-                            ey = 37.521638;
-                            ex = 127.011912;
-                        }else{
-                            ey = 37.509900;
-                            ex = 126.994680;
+    <script>
+
+        function find_loc() {
+            findMapTest()
+            makeMapList()
+        }
+
+        var mapOptions = {
+            center: new naver.maps.LatLng(37.3595704, 127.105399),
+            zoom: 10
+        };
+
+        var map = new naver.maps.Map('map', mapOptions);
+
+        let sx = 0;
+        let sy = 0;
+        let ex = 0;
+        let ey = 0;
+
+
+        function findMapTest() {
+            if (navigator.geolocation) { // GPS를 지원하면
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    user_latitude = position.coords.latitude;
+                    user_longitude = position.coords.longitude;
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/get_location',
+                        data: {
+                            user_latitude: user_latitude, user_longitude: user_longitude
+                        },
+                        success: function (response) {
+                            sx = response['result']['SX']
+                            sy = response['result']['SY']
+                            console.log(sx)
+                            console.log(sy)
+                            loc = $("#inputGroupSelect").val()
+                            if (loc == 1) {
+                                ey = 37.528538;
+                                ex = 126.934312;
+                            } else if (loc == 2) {
+                                ey = 37.566273;
+                                ex = 126.876260;
+                            } else if (loc == 3) {
+                                ey = 37.529341;
+                                ex = 127.071357;
+                            } else if (loc == 4) {
+                                ey = 37.549213;
+                                ex = 127.119979;
+                            } else if (loc == 5) {
+                                ey = 37.588483;
+                                ex = 126.815225;
+                            } else if (loc == 6) {
+                                ey = 37.518070;
+                                ex = 127.081879;
+                            } else if (loc == 7) {
+                                ey = 37.555939;
+                                ex = 126.894570;
+                            } else if (loc == 8) {
+                                ey = 37.538522;
+                                ex = 126.902319;
+                            } else if (loc == 9) {
+                                ey = 37.524391;
+                                ex = 126.953173;
+                            } else if (loc == 10) {
+                                ey = 37.521638;
+                                ex = 127.011912;
+                            } else {
+                                ey = 37.509900;
+                                ex = 126.994680;
+                            }
+
+                            searchPubTransPathAJAX(sx, sy, ex, ey);
+
                         }
 
-                        searchPubTransPathAJAX(sx, sy, ex, ey);
+                    })
+                }, function (error) {
+                    console.error(error);
+                }, {
+                    enableHighAccuracy: false,
+                    maximumAge: 0,
+                    timeout: Infinity
+                });
+            }
+        }
 
+        function makeMapList() {
+
+        }
+
+
+        function searchPubTransPathAJAX(sx, sy, ex, ey) {
+            var xhr = new XMLHttpRequest();
+            //ODsay apiKey 입력
+            var url = "https://api.odsay.com/v1/api/searchPubTransPath?SX=" + sx + "&SY=" + sy + "&EX=" + ex + "&EY=" + ey + "&apiKey=zZOOCFJaccyfaXpDSn6kJaK%2BV5CTfh4tdW7Bp4Mg2Jo";
+            xhr.open("GET", url, true);
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    console.log((JSON.parse(xhr.responseText))["result"]); // <- xhr.responseText 로 결과를 가져올 수 있음
+                    //노선그래픽 데이터 호출
+                    console.log((JSON.parse(xhr.responseText))['result']['path'][0]['info'])
+                    callMapObjApiAJAX((JSON.parse(xhr.responseText))["result"]["path"][0].info.mapObj);
+                }
+            }
+        }
+
+        //길찾기 API 호출
+
+
+        function callMapObjApiAJAX(mabObj) {
+            var xhr = new XMLHttpRequest();
+            //ODsay apiKey 입력
+            var url = "https://api.odsay.com/v1/api/loadLane?mapObject=0:0@" + mabObj + "&apiKey=zZOOCFJaccyfaXpDSn6kJaK%2BV5CTfh4tdW7Bp4Mg2Jo";
+            xhr.open("GET", url, true);
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var resultJsonData = JSON.parse(xhr.responseText);
+                    drawNaverMarker(sx, sy);					// 출발지 마커 표시
+                    drawNaverMarker2(ex, ey);					// 도착지 마커 표시
+                    drawNaverPolyLine(resultJsonData);		// 노선그래픽데이터 지도위 표시
+                    // boundary 데이터가 있을경우, 해당 boundary로 지도이동
+                    if (resultJsonData.result.boundary) {
+                        var boundary = new naver.maps.LatLngBounds(
+                            new naver.maps.LatLng(resultJsonData.result.boundary.top, resultJsonData.result.boundary.left),
+                            new naver.maps.LatLng(resultJsonData.result.boundary.bottom, resultJsonData.result.boundary.right)
+                        );
+                        map.panToBounds(boundary);
                     }
+                }
+            }
+        }
 
-                })
-            }, function (error) {
-                console.error(error);
-            }, {
-                enableHighAccuracy: false,
-                maximumAge: 0,
-                timeout: Infinity
+        // 지도위 마커 표시해주는 함수
+        function drawNaverMarker(x, y) {
+            var marker = new naver.maps.Marker({
+                position: new naver.maps.LatLng(y, x),
+                animation: 2,
+                map: map,
+
             });
         }
-    }
 
-    function makeMapList(){
+        function drawNaverMarker2(x, y) {
+            var marker = new naver.maps.Marker({
+                position: new naver.maps.LatLng(y, x),
+                animation: 2,
+                map: map,
 
-    }
-
-
-
-	function searchPubTransPathAJAX(sx, sy, ex, ey) {
-		var xhr = new XMLHttpRequest();
-		//ODsay apiKey 입력
-		var url = "https://api.odsay.com/v1/api/searchPubTransPath?SX="+sx+"&SY="+sy+"&EX="+ex+"&EY="+ey+"&apiKey=zZOOCFJaccyfaXpDSn6kJaK%2BV5CTfh4tdW7Bp4Mg2Jo";
-		xhr.open("GET", url, true);
-		xhr.send();
-		xhr.onreadystatechange = function() {
-			if (xhr.readyState == 4 && xhr.status == 200) {
-			console.log( (JSON.parse(xhr.responseText))["result"] ); // <- xhr.responseText 로 결과를 가져올 수 있음
-			//노선그래픽 데이터 호출
-            console.log((JSON.parse(xhr.responseText))['result']['path'][0]['info'])
-			callMapObjApiAJAX((JSON.parse(xhr.responseText))["result"]["path"][0].info.mapObj);
-			}
-		}
-	}
-
-	//길찾기 API 호출
+            });
+        }
 
 
-	function callMapObjApiAJAX(mabObj){
-		var xhr = new XMLHttpRequest();
-		//ODsay apiKey 입력
-		var url = "https://api.odsay.com/v1/api/loadLane?mapObject=0:0@"+mabObj+"&apiKey=zZOOCFJaccyfaXpDSn6kJaK%2BV5CTfh4tdW7Bp4Mg2Jo";
-		xhr.open("GET", url, true);
-		xhr.send();
-		xhr.onreadystatechange = function() {
-			if (xhr.readyState == 4 && xhr.status == 200) {
-				var resultJsonData = JSON.parse(xhr.responseText);
-				drawNaverMarker(sx,sy);					// 출발지 마커 표시
-				drawNaverMarker2(ex,ey);					// 도착지 마커 표시
-				drawNaverPolyLine(resultJsonData);		// 노선그래픽데이터 지도위 표시
-				// boundary 데이터가 있을경우, 해당 boundary로 지도이동
-				if(resultJsonData.result.boundary){
-						var boundary = new naver.maps.LatLngBounds(
-				                new naver.maps.LatLng(resultJsonData.result.boundary.top, resultJsonData.result.boundary.left),
-				                new naver.maps.LatLng(resultJsonData.result.boundary.bottom, resultJsonData.result.boundary.right)
-				                );
-						map.panToBounds(boundary);
-				}
-			}
-		}
-	}
+        // 노선그래픽 데이터를 이용하여 지도위 폴리라인 그려주는 함수
+        function drawNaverPolyLine(data) {
+            var lineArray;
 
-	// 지도위 마커 표시해주는 함수
-	function drawNaverMarker(x,y){
-		var marker = new naver.maps.Marker({
-		    position: new naver.maps.LatLng(y, x),
-            animation : 2,
-		    map: map,
+            for (var i = 0; i < data.result.lane.length; i++) {
+                for (var j = 0; j < data.result.lane[i].section.length; j++) {
+                    lineArray = null;
+                    lineArray = new Array();
+                    for (var k = 0; k < data.result.lane[i].section[j].graphPos.length; k++) {
+                        lineArray.push(new naver.maps.LatLng(data.result.lane[i].section[j].graphPos[k].y, data.result.lane[i].section[j].graphPos[k].x));
+                    }
 
-		});
-	}
-
-	function drawNaverMarker2(x,y){
-		var marker = new naver.maps.Marker({
-		    position: new naver.maps.LatLng(y, x),
-            animation : 2,
-		    map: map,
-
-		});
-	}
-
-
-	// 노선그래픽 데이터를 이용하여 지도위 폴리라인 그려주는 함수
-	function drawNaverPolyLine(data){
-		var lineArray;
-
-		for(var i = 0 ; i < data.result.lane.length; i++){
-			for(var j=0 ; j <data.result.lane[i].section.length; j++){
-				lineArray = null;
-				lineArray = new Array();
-				for(var k=0 ; k < data.result.lane[i].section[j].graphPos.length; k++){
-					lineArray.push(new naver.maps.LatLng(data.result.lane[i].section[j].graphPos[k].y, data.result.lane[i].section[j].graphPos[k].x));
-				}
-
-			//지하철결과의 경우 노선에 따른 라인색상 지정하는 부분 (1,2호선의 경우만 예로 들음)
-				if(data.result.lane[i].type == 1){
-					var polyline = new naver.maps.Polyline({
-					    map: map,
-					    path: lineArray,
-					    strokeWeight: 3,
-					    strokeColor: '#0052A4'
-					});
-				}else if(data.result.lane[i].type == 2){
-					var polyline = new naver.maps.Polyline({
-					    map: map,
-					    path: lineArray,
-					    strokeWeight: 3,
-					    strokeColor: '#009D3E'
-					});
-				}else if(data.result.lane[i].type == 3) {
-                    var polyline = new naver.maps.Polyline({
-                        map: map,
-                        path: lineArray,
-                        strokeWeight: 3,
-                        strokeColor: '#EF7C1C'
-                    });
-                }else if(data.result.lane[i].type == 4) {
-                    var polyline = new naver.maps.Polyline({
-                        map: map,
-                        path: lineArray,
-                        strokeWeight: 3,
-                        strokeColor: '#00A5DE'
-                    });
-                }else if(data.result.lane[i].type == 5) {
-                    var polyline = new naver.maps.Polyline({
-                        map: map,
-                        path: lineArray,
-                        strokeWeight: 3,
-                        strokeColor: '#996CAC'
-                    });
-                }else if(data.result.lane[i].type == 6) {
-                    var polyline = new naver.maps.Polyline({
-                        map: map,
-                        path: lineArray,
-                        strokeWeight: 3,
-                        strokeColor: '#CD7C2F'
-                    });
-                }else if(data.result.lane[i].type == 7) {
-                    var polyline = new naver.maps.Polyline({
-                        map: map,
-                        path: lineArray,
-                        strokeWeight: 3,
-                        strokeColor: '#747F00'
-                    });
-                }else if(data.result.lane[i].type == 8) {
-                    var polyline = new naver.maps.Polyline({
-                        map: map,
-                        path: lineArray,
-                        strokeWeight: 3,
-                        strokeColor: '#EA545D'
-                    });
-                }else if(data.result.lane[i].type == 9) {
-                    var polyline = new naver.maps.Polyline({
-                        map: map,
-                        path: lineArray,
-                        strokeWeight: 3,
-                        strokeColor: '#BDB092'
-                    });
-                }else if(data.result.lane[i].type == 100) {
-                    var polyline = new naver.maps.Polyline({
-                        map: map,
-                        path: lineArray,
-                        strokeWeight: 3,
-                        strokeColor: '#F5A200'
-                    });
-                }else if(data.result.lane[i].type == 101) {
-                    var polyline = new naver.maps.Polyline({
-                        map: map,
-                        path: lineArray,
-                        strokeWeight: 3,
-                        strokeColor: '#0065B3'
-                    });
-                }else if(data.result.lane[i].type == 21) {
-                    var polyline = new naver.maps.Polyline({
-                        map: map,
-                        path: lineArray,
-                        strokeWeight: 3,
-                        strokeColor: '#7CA8D5'
-                    });
-                }else if(data.result.lane[i].type == 104) {
-                    var polyline = new naver.maps.Polyline({
-                        map: map,
-                        path: lineArray,
-                        strokeWeight: 3,
-                        strokeColor: '#77C4A3'
-                    });
-                }else if(data.result.lane[i].type == 107) {
-                    var polyline = new naver.maps.Polyline({
-                        map: map,
-                        path: lineArray,
-                        strokeWeight: 3,
-                        strokeColor: '#6FB245'
-                    });
-                }else if(data.result.lane[i].type == 108) {
-                    var polyline = new naver.maps.Polyline({
-                        map: map,
-                        path: lineArray,
-                        strokeWeight: 3,
-                        strokeColor: '#0C8E72'
-                    });
-                }else if(data.result.lane[i].type == 109) {
-                    var polyline = new naver.maps.Polyline({
-                        map: map,
-                        path: lineArray,
-                        strokeWeight: 3,
-                        strokeColor: '#D4003B'
-                    });
-                }else if(data.result.lane[i].type == 111) {
-                    var polyline = new naver.maps.Polyline({
-                        map: map,
-                        path: lineArray,
-                        strokeWeight: 3,
-                        strokeColor: '#F5A200'
-                    });
-                }else{
-					var polyline = new naver.maps.Polyline({
-					    map: map,
-					    path: lineArray,
-					    strokeWeight: 3
-					});
-				}
-			}
-		}
-	}
-</script>
+                    //지하철결과의 경우 노선에 따른 라인색상 지정하는 부분 (1,2호선의 경우만 예로 들음)
+                    if (data.result.lane[i].type == 1) {
+                        var polyline = new naver.maps.Polyline({
+                            map: map,
+                            path: lineArray,
+                            strokeWeight: 3,
+                            strokeColor: '#0052A4'
+                        });
+                    } else if (data.result.lane[i].type == 2) {
+                        var polyline = new naver.maps.Polyline({
+                            map: map,
+                            path: lineArray,
+                            strokeWeight: 3,
+                            strokeColor: '#009D3E'
+                        });
+                    } else if (data.result.lane[i].type == 3) {
+                        var polyline = new naver.maps.Polyline({
+                            map: map,
+                            path: lineArray,
+                            strokeWeight: 3,
+                            strokeColor: '#EF7C1C'
+                        });
+                    } else if (data.result.lane[i].type == 4) {
+                        var polyline = new naver.maps.Polyline({
+                            map: map,
+                            path: lineArray,
+                            strokeWeight: 3,
+                            strokeColor: '#00A5DE'
+                        });
+                    } else if (data.result.lane[i].type == 5) {
+                        var polyline = new naver.maps.Polyline({
+                            map: map,
+                            path: lineArray,
+                            strokeWeight: 3,
+                            strokeColor: '#996CAC'
+                        });
+                    } else if (data.result.lane[i].type == 6) {
+                        var polyline = new naver.maps.Polyline({
+                            map: map,
+                            path: lineArray,
+                            strokeWeight: 3,
+                            strokeColor: '#CD7C2F'
+                        });
+                    } else if (data.result.lane[i].type == 7) {
+                        var polyline = new naver.maps.Polyline({
+                            map: map,
+                            path: lineArray,
+                            strokeWeight: 3,
+                            strokeColor: '#747F00'
+                        });
+                    } else if (data.result.lane[i].type == 8) {
+                        var polyline = new naver.maps.Polyline({
+                            map: map,
+                            path: lineArray,
+                            strokeWeight: 3,
+                            strokeColor: '#EA545D'
+                        });
+                    } else if (data.result.lane[i].type == 9) {
+                        var polyline = new naver.maps.Polyline({
+                            map: map,
+                            path: lineArray,
+                            strokeWeight: 3,
+                            strokeColor: '#BDB092'
+                        });
+                    } else if (data.result.lane[i].type == 100) {
+                        var polyline = new naver.maps.Polyline({
+                            map: map,
+                            path: lineArray,
+                            strokeWeight: 3,
+                            strokeColor: '#F5A200'
+                        });
+                    } else if (data.result.lane[i].type == 101) {
+                        var polyline = new naver.maps.Polyline({
+                            map: map,
+                            path: lineArray,
+                            strokeWeight: 3,
+                            strokeColor: '#0065B3'
+                        });
+                    } else if (data.result.lane[i].type == 21) {
+                        var polyline = new naver.maps.Polyline({
+                            map: map,
+                            path: lineArray,
+                            strokeWeight: 3,
+                            strokeColor: '#7CA8D5'
+                        });
+                    } else if (data.result.lane[i].type == 104) {
+                        var polyline = new naver.maps.Polyline({
+                            map: map,
+                            path: lineArray,
+                            strokeWeight: 3,
+                            strokeColor: '#77C4A3'
+                        });
+                    } else if (data.result.lane[i].type == 107) {
+                        var polyline = new naver.maps.Polyline({
+                            map: map,
+                            path: lineArray,
+                            strokeWeight: 3,
+                            strokeColor: '#6FB245'
+                        });
+                    } else if (data.result.lane[i].type == 108) {
+                        var polyline = new naver.maps.Polyline({
+                            map: map,
+                            path: lineArray,
+                            strokeWeight: 3,
+                            strokeColor: '#0C8E72'
+                        });
+                    } else if (data.result.lane[i].type == 109) {
+                        var polyline = new naver.maps.Polyline({
+                            map: map,
+                            path: lineArray,
+                            strokeWeight: 3,
+                            strokeColor: '#D4003B'
+                        });
+                    } else if (data.result.lane[i].type == 111) {
+                        var polyline = new naver.maps.Polyline({
+                            map: map,
+                            path: lineArray,
+                            strokeWeight: 3,
+                            strokeColor: '#F5A200'
+                        });
+                    } else {
+                        var polyline = new naver.maps.Polyline({
+                            map: map,
+                            path: lineArray,
+                            strokeWeight: 3
+                        });
+                    }
+                }
+            }
+        }
+    </script>
 
 
 </body>

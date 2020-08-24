@@ -10,7 +10,7 @@ db = client.hangangdb  # 'dbsparta'라는 이름의 db를 만듭니다.
 
 @app.route('/')
 def index():
-    return render_template('place.html')
+    return render_template('location.html')
 
 
 @app.route('/get_location', methods=['POST'])
