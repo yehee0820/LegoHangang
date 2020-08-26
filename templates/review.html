@@ -5,7 +5,7 @@
 
     <link rel="shortcut icon" href="../static/images/main/favicon.ico">
     <!-- Webpage Title -->
-    <title>주변 핫플</title>
+    <title>데이트 코스 | 리뷰</title>
 
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -24,106 +24,280 @@
 
     <link href="../static/navbar.css" rel="stylesheet">
 
-    <style type="text/css">
+    <!--jumbotron-->
+    <style>
 
-        #btn-post-box {
-            background-color: steelblue;
-            border-color: #f0f0f0;
+        .col-lg-12 {
+            position: relative;
+            width: 100%;
+            min-height: 1px;
+            padding-top: 50px;
+            padding-right: 15px;
+            padding-left: 15px;
         }
 
-        #btn-review-upload {
-            background-color: lightslategray;
-            border-color: #f0f0f0;
+        .jumbotron-billboard .img {
+            margin-bottom: 0px;
+            opacity: 0.2;
+            color: #fff;
+            background: #000 url("https://bootstrapcreative.com/wp-bc/wp-content/uploads/2017/03/learning-story.png") top center no-repeat;
+            width: 100%;
+            height: 90%;
+            background-size: cover;
+            overflow: hidden;
+            position: absolute;
+            top: 30px;
+            left: 0;
+            z-index: 1;
         }
 
-        body {
-            padding-top: 1em;
-            padding-bottom: 1em;
-            display: grid;
-            background: whitesmoke;
-            min-height: 90vh;
+        .jumbotron h2 {
+            margin-top: 0;
+        }
+
+        .jumbotron {
+            position: relative;
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+
+        .jumbotron .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        @media screen and (max-width: 768px) {
+            .jumbotron {
+                padding-top: 6em;
+                padding-bottom: 1em;
+            }
+        }
+    </style>
+    <!--review-box-->
+    <style>
+        @media (min-width: 992px) {
+            #review-box .container {
+                max-width: 600px;
+            }
+        }
+        #review-box {
+            background-color: #e6e6e6;
+            font-size: 100%;
             font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
         }
 
-        .wrap {
-
-            width: 900px;
-            margin: auto;
+        #review-box div, textarea, input {
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
         }
 
-        .comment {
-            color: #3d3d3d;
-            font-weight: normal;
+        #review-box .container {
+            max-width: 400px;
+            min-width: 300px;
+            margin: 50px auto 0px;
+            background-color: #fff;
+            border: 1px solid #cfcfcf;
+            border-bottom: 3px solid #ccc;
         }
 
-        #post-box {
-            width: 400px;
-            margin: 10px auto;
-            padding: 20px;
-            font-size: small;
-            border-style: solid;
-            border-image: linear-gradient(60deg, #abecd6 0%, #fbed96 100%);
-            border-image-slice: 1;
-            border-image-width: 10px;
-            box-shadow: 10px 10px 10px 10px gainsboro;
+        #review-box .row {
+            width: 80%;
+            margin-left: 4rem;
+            padding: 0 2.5em;
         }
 
-        label {
+        #review-box .row.body {
+            padding: .5em 2.5em 1em;
+        }
+
+        .pull-right {
+            float: right;
+        }
+
+        #review-box h1 {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 300;
+            display: inline-block;
+            font-weight: 100;
+            font-size: 2.8125em;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            margin: 0 0 0.1em 0;
+            padding: 0 0 0.4em 0;
+        }
+
+        #review-box h3 {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            font-size: 1.25em;
+            margin: 1em 0 0.4em 0;
+        }
+
+        #review-box .btn {
+            font-size: 1.0625em;
+            display: inline-block;
+            padding: 0.74em 1.5em;
+            margin: 1.5em 0 0;
+            color: #fff;
+            border-width: 0 0 0 0;
+            border-bottom: 5px solid;
+            text-transform: uppercase;
+            background-color: #b3b3b3;
+            border-bottom-color: #8c8c8c;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 300;
+        }
+
+        #review-box .btn:hover {
+            background-color: #bfbfbf;
+        }
+
+        #review-box .btn.btn-submit {
+            background-color: #4f6fad;
+            border-bottom-color: #374d78;
+        }
+
+        #review-box .btn.btn-submit:hover {
+            background-color: #5f7db6;
+        }
+
+        #review-box form {
+            max-width: 700px;
             display: block;
-            font: 1rem 'Fira Sans', sans-serif;
         }
 
-        input,
-        label {
-            margin: .4rem 0;
+        #review-box form ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
         }
+
+        #review-box form ul li {
+            margin: 0 0 0.25em 0;
+            clear: both;
+            display: inline-block;
+            width: 100%;
+        }
+
+        #review-box form ul li:last-child {
+            margin: 0;
+        }
+
+        #review-box form ul li p {
+            margin: 0;
+            padding: 0;
+            float: left;
+        }
+
+        #review-box form ul li p.right {
+            float: right;
+        }
+
+        #review-box form ul li .divider {
+            margin: 0.5em 0 0.5em 0;
+            border: 0;
+            height: 1px;
+            width: 100%;
+            display: block;
+            background-color: #4f6fad;
+            background-image: linear-gradient(to right, #ee9cb4, #4f6fad);
+        }
+
+        #review-box form ul li .req {
+            color: #ee9cb4;
+        }
+
+        #review-box form label {
+            display: block;
+            margin: 0 0 0.5em 0;
+            color: #4f6fad;
+            font-size: 1em;
+        }
+
+        #review-box form input {
+            margin: 0 0 0.5em 0;
+            border: 1px solid #ccc;
+            padding: 6px 10px;
+            color: #555;
+            font-size: 1em;
+        }
+
+        #review-box form textarea {
+            border: 1px solid #ccc;
+            padding: 6px 10px;
+            width: 100%;
+            color: #555;
+        }
+
+        #review-box form small {
+            color: #4f6fad;
+            margin: 0 0 0 0.5em;
+        }
+
+        @media only screen and (max-width: 480px) {
+            .pull-right {
+                float: none;
+            }
+
+            #review-box input {
+                width: 100%;
+            }
+
+            #review-box label {
+                width: 100%;
+                display: inline-block;
+                float: left;
+                clear: both;
+            }
+
+            #review-box li, p {
+                width: 100%;
+            }
+
+            #review-box input.btn {
+                margin: 1.5em 0 0.5em;
+            }
+
+            #review-box h1 {
+                font-size: 2.25em;
+            }
+
+            #review-box h3 {
+                font-size: 1.125em;
+            }
+
+            #review-box li small {
+                display: none;
+            }
+        }
+
     </style>
 
     <script>
         $(document).ready(function () {
+            $("#review-box").hide();
             $("#cards-box").html("");
             showArticles();
         });
 
         function openClose() {
             // id 값 post-box의 display 값이 block 이면(= 눈에 보이면)
-            if ($("#post-box").css("display") == "block") {
+            if ($("#review-box").css("display") == "block") {
                 // post-box를 가리고
-                $("#post-box").hide();
+                $("#review-box").hide();
                 // 다시 버튼을 클릭하면, 박스 열기를 할 수 있게 텍스트 바꿔두기
                 $("#btn-post-box").text("포스팅 박스 열기");
             } else {
                 // 아니면(눈에 보이지 않으면) post-box를 펴라
-                $("#post-box").show();
+                $("#review-box").show();
                 // 다시 버튼을 클릭하면, 박스 닫기를 할 수 있게 텍스트 바꿔두기
                 $("#btn-post-box").text("포스팅 박스 닫기");
             }
         }
-// postArticle만 없애여....
-        function postArticle() {
-            let nickname = $("#post-nickname").val();
-            let title = $("#post-title").val();
-            let parkLoc = $("#post-location").val();
-            let img = $("#post-img").val()
-            let comment = $("#post-comment").val();
 
+        // postArticle만 없애여....
 
-            // 2. memo에 POST 방식으로 메모 생성 요청하기
-            $.ajax({
-                type: "POST",
-                url: "/date",
-                data: {nickname, title, parkLoc, img, comment}, // 데이터를 주는 방법
-                success: function (response) { // 성공하면
-                    if (response["result"] == "success") {
-                        alert("포스팅 성공!");
-                        // 3. 성공 시 페이지 새로고침하기
-                        window.location.reload();
-                    } else {
-                        alert("서버 오류!")
-                    }
-                }
-            })
-        }
 
         function showArticles() {
             $.ajax({
@@ -171,7 +345,7 @@
 </head>
 
 <body>
-
+<!--navbar-->
 <header>
     <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-custom-2">
         <div class="container">
@@ -197,18 +371,18 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ url_for('show_location') }}">위치</a>
                             <a class="dropdown-item" href="#">자전거 대여</a>
-                            <a class="dropdown-item" href="#">기상 정보</a>
+
                         </div>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">배달/대여</a>
+                        <a class="nav-link" href="#">날씨 정보</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="place.html">주변핫플찾기</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('review_date')}}">데이트 코스 추천</a>
+                        <a class="nav-link" href="{{ url_for('review_date') }}">데이트 코스 추천</a>
                     </li>
                 </ul>
             </div>
@@ -217,60 +391,85 @@
 </header>
 
 <div class="wrap">
-    <div class="jumbotron">
-        <h1 class="display-4">데이트 코스 추천</h1>
-        <p class="lead">여러 한강공원에서의 데이트 코스, 맛집, 공원 시설 등에 대한 리뷰를 공유하는 공간입니다.</p>
-        <hr class="my-4">
-        <p class="lead">
-            <button onclick="openClose()" id="btn-post-box" type="button" class="btn btn-primary">포스팅 박스 열기
-            </button>
-        </p>
-    </div>
-    <form action='/date'  method="POST"  enctype="multipart/form-data">
-        <div id="post-box" class="form-post" style="display:none">
-            <div>
-                <div class="form-group">
-                    <label for="post-nickname">닉네임</label>
-                    <input id="post-nickname" name ="post-nickname" type="text" class="form-control" placeholder="">
+    <!--jumbotron-->
+    <div class="jumbotron jumbotron-billboard">
+        <div class="img"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="display-4">데이트 코스 추천</h1>
+                    <p class="lead">여러 한강공원에서의 데이트 코스, 맛집, 공원 시설 등에 대한 리뷰를 공유하는 공간입니다.</p>
+                    <p class="lead">
+                        <button onclick="openClose()" id="btn-post-box" type="button" class="btn btn-primary">포스팅 박스 열기
+                        </button>
+                    </p>
                 </div>
-                <div class="form-group">
-                    <label for="post-title">리뷰 제목</label>
-                    <input id="post-title" name="post-title" type="text" class="form-control" rows="2">
-                </div>
-                <div class="form-group">
-                    <label for="post-location">장소</label>
-                    <select id="post-location" name="post-location" class="custom-select" aria-label="Example select with button addon"
-                            rows="2">
-                        <option selected>어느 지역에 대한 리뷰인가요?</option>
-                        <option value="1">여의도</option>
-                        <option value="2">난지</option>
-                        <option value="3">뚝섬</option>
-                        <option value="4">광나루</option>
-                        <option value="5">강서</option>
-                        <option value="6">잠실</option>
-                        <option value="7">망원</option>
-                        <option value="8">양화</option>
-                        <option value="9">이촌</option>
-                        <option value="10">잠원</option>
-                        <option value="11">반포</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="post-img">업로드 할 사진을 선택해주세요: </label>
-
-                    <input type="file"
-                           id="post-img" name="post-img" class="form-control-file"
-                           accept="image/png, image/jpeg">
-                </div>
-                <div class="form-group">
-                    <label for="post-comment">간단 코멘트</label>
-                    <textarea id="post-comment" name="post-comment" type="text" class="form-control" rows="7"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary" id="btn-review-upload">리뷰 등록
-                </button>
             </div>
         </div>
-    </form>
+    </div>
+
+
+    <div class="container" id="review-box">
+
+
+        <form action='/date' method="POST" enctype="multipart/form-data">
+            <div class="row body">
+                <ul>
+                    <li>
+                        <p class="left">
+                            <label for="post-nickname">nickname</label>
+                            <input type="text" name="post-nickname" placeholder="yeahjjang"/>
+                        </p>
+                        <p class="pull-right">
+                            <label for="post-title">title</label>
+                            <input type="text" name="post-title" placeholder="리뷰 제목을 적어주세요"/>
+                        </p>
+                    </li>
+
+                    <li>
+                        <p>
+                            <label for="post-location">where</label>
+                            <select id="post-location" name="post-location" class="custom-select" rows="2">
+                                <option selected>어느 지역에 대한 리뷰인가요?</option>
+                                <option value="1">여의도</option>
+                                <option value="2">난지</option>
+                                <option value="3">뚝섬</option>
+                                <option value="4">광나루</option>
+                                <option value="5">강서</option>
+                                <option value="6">잠실</option>
+                                <option value="7">망원</option>
+                                <option value="8">양화</option>
+                                <option value="9">이촌</option>
+                                <option value="10">잠원</option>
+                                <option value="11">반포</option>
+                            </select>
+                        </p>
+                    </li>
+                    <li>
+                        <div class="divider"></div>
+                    </li>
+                    <li>
+                        <label for="post-img">choose images: </label>
+
+                        <input type="file"
+                               id="post-img" name="post-img" class="form-control-file"
+                               accept="image/png, image/jpeg">
+                    </li>
+                    <li>
+                        <label for="post-comment">comments</label>
+                        <textarea cols="43" rows="3" name="post-comment"></textarea>
+                    </li>
+
+                    <li>
+                        <input class="btn btn-submit" type="submit" value="Submit"/>
+                        <small>or press <strong>enter</strong></small>
+                    </li>
+
+                </ul>
+            </div>
+        </form>
+
+    </div>
 
 
     <div id="cards-box" class="card-columns">
