@@ -38,6 +38,8 @@
         });
     </script>
 
+
+
     <style>
         body {
             padding-top: 1em;
@@ -152,8 +154,9 @@
         <div id="map" class="col-md-8" style="height:400px"></div> <!-- this is jido -->
         <div id="show-info-box" class="col-md-4">
             <p>이동경로</p>
-            <p>환승역</p>
+            <ul id="route"></ul>
             <p>소요시간</p>
+            <ul id="totalTime"></ul>
         </div>
     </div>
 
@@ -163,18 +166,22 @@
 
 
     <script>
-
-        function find_loc() {
-            findMapTest()
-
-        }
-
         var mapOptions = {
             center: new naver.maps.LatLng(37.3595704, 127.105399),
             zoom: 10
         };
 
         var map = new naver.maps.Map('map', mapOptions);
+
+
+        function find_loc() {
+             $("#route").empty();
+             $("#totalTime").empty();
+             map = new naver.maps.Map('map', mapOptions);
+            findMapTest()
+        }
+
+
 
         let sx = 0;
         let sy = 0;
@@ -251,6 +258,7 @@
             }
         }
 
+
         let m = 1;
 
         function getInfo(sx, sy, ex, ey) {
@@ -260,29 +268,45 @@
             xhr.open("GET", url, true);
             xhr.send();
             xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    for (let i = 0; i < ((JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"]).length; i++) {
 
-                        if ((JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["trafficType"] == 1) {
-                            console.log(m + '번째 =', (JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["startName"] + '-->'
-                                + (JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["endName"],
-                                '(지하철 ' + (JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["lane"][0]["name"] + ')')
-                            m++;
-                        } else if ((JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["trafficType"] == 2) {
-                            console.log(m + '번째 =', (JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["startName"] + '-->'
-                                + (JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["endName"],
-                                '(버스 ' + (JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["lane"][0]["busNo"] + '번)')
-                            m++;
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    let subpath = (JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"]
+                    let path = (JSON.parse(xhr.responseText))["result"]["path"][0]
+
+                    time = "<li>" + path["info"]["totalTime"] + "분 소요 " + "</li>"
+                    walking = "<li>" + "총 도보 거리 = " + path["info"]["totalWalk"] + "m" + "</li>"
+                    $("#totalTime").append(time)
+                    $("#totalTime").append(walking)
+
+                    for (let i = 0; i < subpath.length; i++) {
+
+                        if (subpath[i]["trafficType"] == 1) {
+                            txt = "<li>" + subpath[i]["startName"] + "-->"
+                                + subpath[i]["endName"] +
+                                " (지하철 " + subpath[i]["lane"][0]["name"] + ")" + "</li>"
+
+                            console.log(txt)
+                            $("#route").append(txt)
+                        } else if (subpath[i]["trafficType"] == 2) {
+                            txt = "<li>" + subpath[i]["startName"] + "-->"
+                                + subpath[i]["endName"] +
+                                " (" + subpath[i]["lane"][0]["busNo"] + "번 버스)" +"</li>"
+
+                            console.log(txt)
+                            $("#route").append(txt)
                         } else {
-                            if ((JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["sectionTime"] == 0) {
+                            if (subpath[i]["sectionTime"] == 0) {
                                 console.log('(환승)')
+                                txt = "<li>" + "( 환승 )" + "</li>"
+                                $("#route").append("환승")
                             } else {
-                                console.log(m + '번째 = 도보로 이동', '(' + (JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"][i]["sectionTime"] + '분 소요)')
-                                m++;
+                                 txt = "<li>" + "도보로 이동" + " (" + subpath[i]["sectionTime"] + "분 소요)" +"</li>"
+
+                                console.log(txt)
+                                $("#route").append(txt)
+
                             }
                         }
-
-
                     }
                 }
             }

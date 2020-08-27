@@ -80,6 +80,7 @@
                 max-width: 600px;
             }
         }
+
         #review-box {
             background-color: #e6e6e6;
             font-size: 100%;
@@ -302,12 +303,14 @@
         function showArticles() {
             $.ajax({
                 type: "GET",
-                url: "/date",
+                url: "/date_review",
                 data: {},
                 success: function (response) {
+                    console.log(response)
                     let reviews = response["reviews"];
                     console.log(reviews);
                     for (let i = 0; i < reviews.length; i++) {
+
                         makeCard(reviews[i]["title"], reviews[i]["nickname"], reviews[i]["parkLoc"], reviews[i]["img"], reviews[i]["comment"]);
                     }
                 }
@@ -317,10 +320,11 @@
         function makeCard(title, nickname, parkLoc, img, comment) {
             let tempHtml = `<div class="card">
                         <div class="card-body">
+
                         <a class="card-title">${title}</a>
                         <p class="card-text nickname">${nickname}</p>
                         <p class="card-text">${parkLoc}</p>
-                        <img class="card-img">${img}</img>
+                        <img class="card-img" src="${img}" alt="Card image cap">
                         <p class="card-text comment">${comment}</p>
                         </div>
                     </div>`;
@@ -345,6 +349,8 @@
 </head>
 
 <body>
+{#<img src="{{ url_for('images',filename='000004540020.jpeg') }}"/>#}
+
 <!--navbar-->
 <header>
     <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-custom-2">
@@ -477,73 +483,72 @@
             <div class="card-body">
                 <a class="card-title">제목</a>
                 <p class="card-text nickname">닉네임</p>
-                <div class="card-body">
-
                     <p class="card-text">한강주소</p>
+                <img class="card-img"
+                 src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
+                 alt="Card image cap">
                     <p class="card-text comment">코멘트</p>
                 </div>
             </div>
-        </div>
         <div class="card">
-            <img class="card-img-top"
+            <div class="card-body">
+                <a class="card-title">제목</a>
+                <p class="card-text nickname">닉네임</p>
+                    <p class="card-text">한강주소</p>
+                <img class="card-img"
                  src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
                  alt="Card image cap">
-            <div class="card-body">
-                <a class="card-title">여기 기사 제목이 들어가죠</a>
-                <p class="card-text">기사의 요약 내용이 들어갑니다. 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산...</p>
-                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
+                    <p class="card-text comment">코멘트</p>
+                </div>
             </div>
-        </div>
         <div class="card">
-            <img class="card-img-top"
+            <div class="card-body">
+                <a class="card-title">제목</a>
+                <p class="card-text nickname">닉네임</p>
+                    <p class="card-text">한강주소</p>
+                <img class="card-img"
                  src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
                  alt="Card image cap">
-            <div class="card-body">
-                <a href="#" class="card-title">여기 기사 제목이 들어가죠</a>
-                <p class="card-text">기사의 요약 내용이 들어갑니다. 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산...</p>
-                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
+                    <p class="card-text comment">코멘트</p>
+                </div>
             </div>
-        </div>
         <div class="card">
-            <img class="card-img-top"
+            <div class="card-body">
+                <a class="card-title">제목</a>
+                <p class="card-text nickname">닉네임</p>
+                    <p class="card-text">한강주소</p>
+                <img class="card-img"
                  src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
                  alt="Card image cap">
-            <div class="card-body">
-                <a href="#" class="card-title">여기 기사 제목이 들어가죠</a>
-                <p class="card-text">기사의 요약 내용이 들어갑니다. 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산...</p>
-                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
+                    <p class="card-text comment">코멘트</p>
+                </div>
             </div>
-        </div>
         <div class="card">
-            <img class="card-img-top"
+            <div class="card-body">
+                <a class="card-title">제목</a>
+                <p class="card-text nickname">닉네임</p>
+                    <p class="card-text">한강주소</p>
+                <img class="card-img"
                  src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
                  alt="Card image cap">
-            <div class="card-body">
-                <a href="#" class="card-title">여기 기사 제목이 들어가죠</a>
-                <p class="card-text">기사의 요약 내용이 들어갑니다. 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산...</p>
-                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
+                    <p class="card-text comment">코멘트</p>
+                </div>
             </div>
-        </div>
         <div class="card">
-            <img class="card-img-top"
+            <div class="card-body">
+                <a class="card-title">제목</a>
+                <p class="card-text nickname">닉네임</p>
+                    <p class="card-text">한강주소</p>
+                <img class="card-img"
                  src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
                  alt="Card image cap">
-            <div class="card-body">
-                <a href="#" class="card-title">여기 기사 제목이 들어가죠</a>
-                <p class="card-text">기사의 요약 내용이 들어갑니다. 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산...</p>
-                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
+                    <p class="card-text comment">코멘트</p>
+                </div>
             </div>
+
+
         </div>
-        <div class="card">
-            <img class="card-img-top"
-                 src="https://www.eurail.com/content/dam/images/eurail/Italy%20OCP%20Promo%20Block.adaptive.767.1535627244182.jpg"
-                 alt="Card image cap">
-            <div class="card-body">
-                <a href="#" class="card-title">여기 기사 제목이 들어가죠</a>
-                <p class="card-text">기사의 요약 내용이 들어갑니다. 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라만세 무궁화 삼천리 화려강산...</p>
-                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
-            </div>
-        </div>
+
     </div>
 </div>
 

@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, jsonify, url_for
+from flask import Flask, render_template, request, jsonify, url_for,redirect,send_from_directory
 from pymongo import MongoClient
 from bs4 import BeautifulSoup
 import requests
-
+from werkzeug.utils import secure_filename
+import os
 
 
 
@@ -12,6 +13,12 @@ import requests
 app = Flask(__name__)
 client = MongoClient('localhost', 27017)  # mongoDB는 27017 포트로 돌아갑니다.
 db = client.hangangdb  # 'dbsparta'라는 이름의 db를 만듭니다.
+
+
+
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+
 
 @app.route('/')
 def index():
@@ -65,25 +72,38 @@ for i in range(9):
 # review.html
 @app.route('/date', methods=['POST'])
 def upload_file():
+    target = os.path.join(APP_ROOT, 'images')
     img_receive = request.files['post-img']
-    print(img_receive)
     name_receive = request.form['post-nickname']
     title_receive = request.form['post-title']
     loc_receive = request.form['post-location']
     comment_receive = request.form['post-comment']
 
     review = {'nickname': name_receive, 'title': title_receive, 'parkLoc': loc_receive, 'img': img_receive,
-           'comment': comment_receive}
+              'comment': comment_receive}
+
+    for upload in request.files.getlist("post-img"):  # multiple image handel
+        filename = secure_filename(upload.filename)
+        destination = "/".join([target, filename])
+        upload.save(destination)
+        review = {'nickname': name_receive, 'title': title_receive, 'parkLoc': loc_receive, 'img': filename,
+                  'comment': comment_receive}
+        db.reviews.insert(review)
+
 
     # 3. mongoDB에 데이터를 넣기
-    db.reviews.insert_one(review)
+    # db.reviews.insert_one(review)
 
-    return jsonify({'result': 'success', 'reviews': review})
+    return redirect(url_for('review_date'))
 
 
-@app.route('/date', methods=['GET'])
+@app.route('/date_review', methods=['GET'])
 def read_reviews():
-    result = list(db.reviews.find({}, {'_id': 0}))
+    target = os.path.join(APP_ROOT, 'images')
+    result = list(db.reviews.find({}, {'_id': False}))
+    for i in result:
+       # i['img']
+        return send_from_directory(target,i['img'])
 
     return jsonify({'result': 'success', 'reviews': result})
 
