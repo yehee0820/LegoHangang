@@ -1,0 +1,177 @@
+<!Doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Javascript + jQuery + Ajax 날씨 불러오기</title>
+    <!-- JQuery를 import 합니다 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style type="text/css">
+        div.question-box {
+            margin: 10px 0 20px 0;
+        }
+
+        table {
+            border: 1px solid;
+            border-collapse: collapse;
+        }
+
+        td,
+        th {
+            padding: 10px;
+            border: 1px solid;
+        }
+    </style>
+
+    <script>
+        //현재 날짜 호출 함
+        function getFormatDate(date) {
+            var year = date.getFullYear();
+            var month = (1 + date.getMonth());
+            month = month >= 10 ? month : '0' + month;
+            var day = date.getDate();
+            day = day >= 10 ? day : '0' + day;
+            return year + '' + month + '' + day;
+        }
+        function getCurrentTime(date) {
+            var hour = date.getHours();
+            if(hour >=23){
+                hour = '2300'
+            }else if(hour>=20){
+                hour = '2000'
+            }else if(hour>=17){
+                hour = '1700'
+            }else if(hour>=14){
+                hour = '1400'
+            }else if(hour>=11){
+                hour = '1100'
+            }else if(hour >=8){
+                hour = '0800'
+            }else if(hour >=5){
+                hour = '0500'
+            }else if(hour >=2){
+                hour = '0200'
+            }else{
+                hour = '2300'
+            }
+
+            return hour
+        }
+
+        var date = new Date();
+
+
+        let nx = 0;
+        let ny = 0;
+
+        function showWeather() {
+            loc = $("#inputGroupSelect").val()
+            if (loc == 1){
+                nx = 37.51488888888889;
+                ny = 126.93675555555556;
+            }else if (loc == 2){
+                nx = 37.501783333333336;
+                ny = 126.996575;
+            }else if (loc == 3){
+                nx = 37.57551388888889;
+                ny = 126.89681111111112;
+            }else if (loc == 4){
+                nx = 37.50335555555556;
+                ny = 127.08641944444445;
+            }else if (loc == 5){
+                nx = 37.53103333333333;
+                ny = 127.07503055555556;
+            }else if (loc == 6){
+                nx = 37.55243333333333;
+                ny = 126.90776666666667;
+            }else if (loc == 7){
+                nx = 37.51840277777778;
+                ny = 126.97535555555555;
+            }else if (loc == 8){
+                nx = 37.51208888888889;
+                ny = 127.01605277777777;
+            }else if (loc == 9){
+                nx = 37.535;
+                ny = 126.89802222222222;
+            }else if (loc == 10){
+                nx = 37.54896111111111;
+                ny = 127.12935277777777;
+            }else{
+                nx = 37.57594166666667;
+                ny = 126.81601944444444;
+            }
+
+            currentDate = getFormatDate(date);
+            currentTime = getCurrentTime(date);
+
+           WeatherInfo(currentDate, currentTime, nx, ny);
+
+
+        }
+
+        function WeatherInfo(date, currentTime, nx, ny) {
+            $('#weather-info').empty();
+            $.ajax({
+                type: "GET",
+                url: "http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtNcst?serviceKey=4cXbnLf5XTQB4jF9noG%2FptiAwPg8qqmtiY%2FXx3zYKyPpWZS1wt0MPf9bRNNMLcDKBayZoVfW6phh9hZ1TTjdww%3D%3D&numOfRows=10&pageNo=1&datatype=JSON&base_date=" + date + "&base_time=" + currentTime + "&nx=" + nx + "&ny=" + ny ,
+                data: {},
+                success: function (response) {
+                    let rows = response["RealtimeCityAir"]["row"];
+                    for (let i = 0; i < rows.length; i++) {
+                        let guName = rows[i]['MSRSTE_NM'];
+                        let guMise = rows[i]['PM10'];
+                        let tempHtml = `<li>${guName} : ${guMise}</li>`
+                        $('#mise-info').append(tempHtml);
+                    }
+                }
+            })
+        }
+    </script>
+
+</head>
+
+<body>
+<h1>Javascript + jQuery + Ajax 연습하기</h1>
+
+<hr/>
+
+<div class="question-box">
+    <h2>서울시 OpenAPI(실시간 따릉이 현황)를 이용하기</h2>
+    <p>모든 거치대(stationName)와 거치대 수(rackTotCnt), 남은 따릉이 수(parkingBikeTotCnt)를 보여주세요</p>
+    <p>업데이트 버튼을 누를 때마다 데이터가 지웠다 새로 씌여져야 합니다.</p>
+    <button onclick="showWeather()">업데이트</button>
+
+    <div class="input-group">
+            <select class="custom-select" id="inputGroupSelect" aria-label="Example select with button addon">
+                <option selected>가고자 하는 한강공원을 선택하세요</option>
+                <option value="1">여의도한강공원</option>
+                <option value="2">반포한강공원</option>
+                <option value="3">난지한강공원</option>
+                <option value="4">잠실한강공원</option>
+                <option value="5">뚝섬한강공원</option>
+                <option value="6">망원한강공원</option>
+                <option value="7">이촌한강공원</option>
+                <option value="8">잠원한강공원</option>
+                <option value="9">양화한강공원</option>
+                <option value="10">광나루한강공원</option>
+                <option value="11">강서한강공원</option>
+
+
+            </select>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <td>거치대 위치</td>
+            <td>거치대 수</td>
+            <td>현재 거치된 따릉이 수</td>
+        </tr>
+        </thead>
+        <tbody id="weather-info">
+        </tbody>
+    </table>
+</div>
+</body>
+
+</html>
