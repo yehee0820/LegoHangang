@@ -32,8 +32,8 @@
 }
 
 .navbar {
-    padding-bottom: 1rem;
-    padding-top: 1rem;
+    padding-bottom: -1rem;
+    padding-top: -1rem;
 }
 
 .navbar-brand {

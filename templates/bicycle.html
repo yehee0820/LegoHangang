@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <link rel="shortcut icon" href="../static/images/main/favicon.ico">
+
+    <!-- Webpage Title -->
+    <title>공원 별 | 위치 검색</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    <link href="../static/navbar.css" rel="stylesheet">
+
+
+    <!--navbar javascript-->
+    <script>
+        $(document).ready(function () {
+            $('#navbarDropdown').mouseenter(function () {
+                $('.dropdown-menu').slideToggle(300, "linear");
+            });
+
+            $('.dropdown-menu').mouseleave(function () {
+                $(this).slideToggle(300, "linear");
+            });
+        });
+    </script>
+
+    <script>
+        function BikeInfo() {
+
+            bikeLoc = $("#inputGroupSelect").val()
+            if (bikeLoc == 1) {
+                bikeLoc == 'yeouido'
+            } else if (bikeLoc == 2) {
+                bikeLoc == 'nanji'
+            } else if (bikeLoc == 11) {
+                bikeLoc == 'banpo'
+            } else if (bikeLoc == 4) {
+                bikeLoc == 'gwangnaru'
+            } else if (bikeLoc == 9) {
+                bikeLoc == 'ichon'
+            } else if (bikeLoc == 3) {
+                bikeLoc == 'dduksum'
+            } else if (bikeLoc == 5) {
+                bikeLoc == 'gangseo'
+            } else if (bikeLoc == 8) {
+                bikeLoc == 'yangwha'
+            } else if (bikeLoc == 10) {
+                bikeLoc == 'jamwon'
+            } else if (bikeLoc == 6) {
+                bikeLoc == 'jamsil'
+            } else {
+                bikeLoc == 'mangwon'
+            }
+            alert(bikeLoc)
+            $.ajax({
+                type: 'GET',
+                url: '/bicycle_locate?locate='+bikeLoc,
+                data: {
+                },
+                success: function (response) {
+                    console.log(response)
+                }
+            })
+        }
+    </script>
+
+    <style>
+        .jumbotron{
+            margin-top: 3rem;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-custom-2">
+        <div class="container">
+            <a class="navbar-brand" href="#" target="_self">
+                <strong>Lego, Hangang</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}" target="_self">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" target="_self" role="button"
+                           data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">공원별정보</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ url_for('show_location') }}">위치</a>
+                            <a class="dropdown-item" href="#">자전거 대여</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">날씨 정보</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="place.html">주변핫플찾기</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('review_date') }}">데이트 코스 추천</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="jumbotron">
+    <h1 class="display-4">한강 자전거 대여소 찾기</h1>
+    <p class="lead">가장 가까운 자전거 대여소의 위치를 알려줍니다(위치정보 허용)</p>
+    <p>따릉이와는 다른 대여소입니다.</p>
+    <hr class="my-4">
+    <div class="input-group">
+        <select class="custom-select" id="inputGroupSelect" aria-label="Example select with button addon">
+            <option selected>자전거 대여를 하려고 하는 한강공원 위치를 선택하세요</option>
+            <option value="1">여의도한강공원</option>
+            <option value="2">난지한강공원</option>
+            <option value="3">뚝섬한강공원</option>
+            <option value="4">광나루한강공원</option>
+            <option value="5">강서한강공원</option>
+            <option value="6">잠실한강공원</option>
+            <option value="7">망원한강공원</option>
+            <option value="8">양화한강공원</option>
+            <option value="9">이촌한강공원</option>
+            <option value="10">잠원한강공원</option>
+            <option value="11">반포한강공원</option>
+        </select>
+        <p class="lead input-group-append">
+            <button class="btn btn-outline-secondary" type="button" onclick="BikeInfo()">대여소 찾기</button>
+        </p>
+    </div>
+</div>
+
+
+
+</body>
+</html>

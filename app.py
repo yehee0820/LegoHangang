@@ -3,12 +3,8 @@ from pymongo import MongoClient
 from bs4 import BeautifulSoup
 import requests
 from werkzeug.utils import secure_filename
+import pandas as pd
 import os
-
-
-
-
-
 
 app = Flask(__name__)
 client = MongoClient('localhost', 27017)  # mongoDB는 27017 포트로 돌아갑니다.
@@ -16,21 +12,321 @@ db = client.hangangdb  # 'dbsparta'라는 이름의 db를 만듭니다.
 
 
 
-APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-
-
-
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('bicycle.html')
 
 @app.route('/date')
 def review_date():
-    return render_template('review.html')
+    return render_template('upload.html')
 
 @app.route('/get_location')
 def show_location():
     return render_template('location.html')
+
+@app.route('/bicycle')
+def show_bicycle_info():
+    return render_template('bicycle.html')
+
+###### review image uploading
+
+app.config['UPLOAD_FOLDER'] = 'static/uploadimg'
+
+@app.route('/upload')
+def render_html():
+    return render_template('upload.html')
+
+@app.route('/fileUpload',methods = ['POST'])
+def upload_file():
+    f = request.files['file']
+    f.save(os.path.join(app.config['UPLOAD_FOLDER'], f.filename))
+    return 'success!'
+
+@app.route('/test')
+def test():
+    filename = 'static/uploadimg/sparta.png'
+    return render_template('test.html',filename=filename)
+
+##########################
+#bicycle_info
+##########################
+
+def getBikeInfo(location):
+    print("##################")
+    print(location)
+    print("##################")
+    base_dir = 'Users/yehee/Desktop/LegoHangang/LegoHangang'
+    excel_file = 'static/bicycle_info.xlsx'
+    excel_dir = os.path.join(base_dir, excel_file)
+
+    # read a excel file and make it as a DataFrame
+    if location=='yeouido':
+        df_bicycle = pd.read_excel(excel_dir,
+                                  sheet_name = 'sheet',
+                                  names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
+                                  dtype = {'id':int, 'location': str,
+                                             'where': str,
+                                             'address': str,
+                                             'latitude': float,
+                                             'longitude': float},
+                                  index_col = 'id',
+                                  na_values = ',',
+                                  comment = '#')
+    elif location == 'nanji':
+        df_bicycle = pd.read_excel(excel_dir,
+                                  sheet_name = 'sheet',
+                                  names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
+                                  dtype = {'id':int, 'location': str,
+                                             'where': str,
+                                             'address': str,
+                                             'latitude': float,
+                                             'longitude': float},
+                                  index_col = 'id',
+                                  na_values = ',',
+                                  comment = '#')
+    elif location == 'dduksum':
+        df_bicycle = pd.read_excel(excel_dir,
+                                  sheet_name = 'sheet',
+                                  names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
+                                  dtype = {'id':int, 'location': str,
+                                             'where': str,
+                                             'address': str,
+                                             'latitude': float,
+                                             'longitude': float},
+                                  index_col = 'id',
+                                  na_values = ',',
+                                  comment = '#')
+    elif location == 'jamsil':
+        df_bicycle = pd.read_excel(excel_dir,
+                                  sheet_name = 'sheet',
+                                  names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
+                                  dtype = {'id':int, 'location': str,
+                                             'where': str,
+                                             'address': str,
+                                             'latitude': float,
+                                             'longitude': float},
+                                  index_col = 'id',
+                                  na_values = ',',
+                                  comment = '#')
+    elif location == 'jamwon':
+        df_bicycle = pd.read_excel(excel_dir,
+                                  sheet_name = 'sheet',
+                                  names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
+                                  dtype = {'id':int, 'location': str,
+                                             'where': str,
+                                             'address': str,
+                                             'latitude': float,
+                                             'longitude': float},
+                                  index_col = 'id',
+                                  na_values = ',',
+                                  comment = '#')
+    elif location == 'gwangnaru':
+        df_bicycle = pd.read_excel(excel_dir,
+                                  sheet_name = 'sheet',
+                                  names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
+                                  dtype = {'id':int, 'location': str,
+                                             'where': str,
+                                             'address': str,
+                                             'latitude': float,
+                                             'longitude': float},
+                                  index_col = 'id',
+                                  na_values = ',',
+                                  comment = '#')
+    elif location == 'yangwha':
+        df_bicycle = pd.read_excel(excel_dir,
+                                  sheet_name = 'sheet',
+                                  names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
+                                  dtype = {'id':int, 'location': str,
+                                             'where': str,
+                                             'address': str,
+                                             'latitude': float,
+                                             'longitude': float},
+                                  index_col = 'id',
+                                  na_values = ',',
+                                  comment = '#')
+    elif location == 'gangseo':
+        df_bicycle = pd.read_excel(excel_dir,
+                                  sheet_name = 'sheet',
+                                  names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
+                                  dtype = {'id':int, 'location': str,
+                                             'where': str,
+                                             'address': str,
+                                             'latitude': float,
+                                             'longitude': float},
+                                  index_col = 'id',
+                                  na_values = ',',
+                                  comment = '#')
+    elif location == 'banpo':
+        df_bicycle = pd.read_excel(excel_dir,
+                                  sheet_name = 'sheet',
+                                  names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
+                                  dtype = {'id':int, 'location': str,
+                                             'where': str,
+                                             'address': str,
+                                             'latitude': float,
+                                             'longitude': float},
+                                  index_col = 'id',
+                                  na_values = ',',
+                                  comment = '#')
+    elif location == 'ichon':
+        df_bicycle = pd.read_excel(excel_dir,
+                                  sheet_name = 'sheet',
+                                  names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
+                                  dtype = {'id':int, 'location': str,
+                                             'where': str,
+                                             'address': str,
+                                             'latitude': float,
+                                             'longitude': float},
+                                  index_col = 'id',
+                                  na_values = ',',
+                                  comment = '#')
+    else:
+        df_bicycle = pd.read_excel(excel_dir,
+                                   sheet_name='sheet',
+                                   names=['id', 'location', 'where', 'address', 'latitude', 'longitude'],
+                                   dtype={'id': int, 'location': str,
+                                          'where': str,
+                                          'address': str,
+                                          'latitude': float,
+                                          'longitude': float},
+                                   index_col='id',
+                                   na_values=',',
+                                   comment='#')
+    return df_bicycle
+
+@app.route("/bicycle_locate", methods=["GET"])
+def my_excel_data():
+    q = request.args.get('locate')  # q는 dducksum
+
+    data = getBikeInfo(q)
+    print("#######################")
+    print(data)
+    print("#######################")
+    # 돌아오는 data는 dataframe이기 때문에 data to list변환을 해주어야합니다.
+    convert_data = data.values.tolist()
+    return convert_data
+
+
+
+##########################
+#rent_info
+##########################
+base_dir = 'Users/yehee/Desktop/LegoHangang/LegoHangang'
+excel_file = 'static/rent_info.xlsx'
+excel_dir = os.path.join(base_dir, excel_file)
+
+# read a excel file and make it as a DataFrame
+
+# df_yeouido = pd.read_excel(excel_dir,
+#                           sheet_name = 'yeouido',
+#                           names = ['id', 'name', 'location', 'latitude', 'longitude', 'time', 'url', 'comment'],
+#                           dtype = {'id':int, 'name': str,
+#                                      'location': str,
+#                                      'latitude': float,
+#                                      'longitude': float, 'time':str, 'url':str, 'comment':str},
+#                           index_col = 'id',
+#                           na_values = ',',
+#                           comment = '#')
+#
+# df_gwangnaru = pd.read_excel(excel_dir,
+#                           sheet_name = 'gwangnaru',
+#                           names = ['id', 'name', 'location', 'latitude', 'longitude', 'time', 'url', 'comment'],
+#                           dtype = {'id':int, 'name': str,
+#                                      'location': str,
+#                                      'latitude': float,
+#                                      'longitude': float, 'time':str, 'url':str, 'comment':str},
+#                           index_col = 'id',
+#                           na_values = ',',
+#                           comment = '#')
+#
+# df_nanji = pd.read_excel(excel_dir,
+#                           sheet_name = 'nanji',
+#                           names = ['id', 'name', 'location', 'latitude', 'longitude', 'time', 'url', 'comment'],
+#                           dtype = {'id':int, 'name': str,
+#                                      'location': str,
+#                                      'latitude': float,
+#                                      'longitude': float, 'time':str, 'url':str, 'comment':str},
+#                           index_col = 'id',
+#                           na_values = ',',
+#                           comment = '#')
+#
+# df_ichon = pd.read_excel(excel_dir,
+#                           sheet_name = 'ichon',
+#                           names = ['id', 'name', 'location', 'latitude', 'longitude', 'time', 'url', 'comment'],
+#                           dtype = {'id':int, 'name': str,
+#                                      'location': str,
+#                                      'latitude': float,
+#                                      'longitude': float, 'time':str, 'url':str, 'comment':str},
+#                           index_col = 'id',
+#                           na_values = ',',
+#                           comment = '#')
+#
+# df_banpo = pd.read_excel(excel_dir,
+#                           sheet_name = 'banpo',
+#                           names = ['id', 'name', 'location', 'latitude', 'longitude', 'time', 'url', 'comment'],
+#                           dtype = {'id':int, 'name': str,
+#                                      'location': str,
+#                                      'latitude': float,
+#                                      'longitude': float, 'time':str, 'url':str, 'comment':str},
+#                           index_col = 'id',
+#                           na_values = ',',
+#                           comment = '#')
+#
+# df_jamwon = pd.read_excel(excel_dir,
+#                           sheet_name = 'jamwon',
+#                           names = ['id', 'name', 'location', 'latitude', 'longitude', 'time', 'url', 'comment'],
+#                           dtype = {'id':int, 'name': str,
+#                                      'location': str,
+#                                      'latitude': float,
+#                                      'longitude': float, 'time':str, 'url':str, 'comment':str},
+#                           index_col = 'id',
+#                           na_values = ',',
+#                           comment = '#')
+#
+# df_mangwon = pd.read_excel(excel_dir,
+#                           sheet_name = 'mangwon',
+#                           names = ['id', 'name', 'location', 'latitude', 'longitude', 'time', 'url', 'comment'],
+#                           dtype = {'id':int, 'name': str,
+#                                      'location': str,
+#                                      'latitude': float,
+#                                      'longitude': float, 'time':str, 'url':str, 'comment':str},
+#                           index_col = 'id',
+#                           na_values = ',',
+#                           comment = '#')
+#
+# df_yangwha = pd.read_excel(excel_dir,
+#                           sheet_name = 'yangwha',
+#                           names = ['id', 'name', 'location', 'latitude', 'longitude', 'time', 'url', 'comment'],
+#                           dtype = {'id':int, 'name': str,
+#                                      'location': str,
+#                                      'latitude': float,
+#                                      'longitude': float, 'time':str, 'url':str, 'comment':str},
+#                           index_col = 'id',
+#                           na_values = ',',
+#                           comment = '#')
+#
+# df_dduksum = pd.read_excel(excel_dir,
+#                           sheet_name = 'dduksum',
+#                           names = ['id', 'name', 'location', 'latitude', 'longitude', 'time', 'url', 'comment'],
+#                           dtype = {'id':int, 'name': str,
+#                                      'location': str,
+#                                      'latitude': float,
+#                                      'longitude': float, 'time':str, 'url':str, 'comment':str},
+#                           index_col = 'id',
+#                           na_values = ',',
+#                           comment = '#')
+
+#print(df_yeouido)
+#print(df_gwangnaru)
+#print(df_banpo)
+#print(df_ichon)
+#print(df_jamwon)
+#print(df_yangwha)
+#print(df_dduksum)
+#print(df_nanji)
+#print(df_mangwon)
+
+
 
 
 # location 가져오기 --> 지도 그리기
@@ -46,70 +342,33 @@ def test_origin():
 
     return jsonify({'result':origin})
 
-# place.html
-
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-data = requests.get('https://map.naver.com/v5/search/%EC%9D%8C%EC%8B%9D%EC%A0%90?c=14128902.1697737,4512813.4860712,14,0,0,0,dh', headers=headers)
-
-# HTML을 BeautifulSoup이라는 라이브러리를 활용해 검색하기 용이한 상태로 만듦
-soup = BeautifulSoup(data.text, 'html.parser')
-
-# select를 이용해서, tr들을 불러오기
-yeouido_places = soup.select('#_pcmap_list_scroll_container > ul')
-
-for i in range(9):
-    for yeouido_eat in yeouido_places:
-        span_tag = yeouido_eat.select_one('li:nth-child('+ i +') > div._1IVzZ > a > div._1JnOs > div > span')
-        if span_tag is not None:
-            name = span_tag.text
-            image = yeouido_eat.select_one('li:nth-child('+ i +') > div._2vHLm > ul > li:nth-child(1) > a > div')
-            comment = yeouido_eat.select_one('li:nth-child('+ i +') > div._1IVzZ > a > div:nth-child(2) > div')
-
-            print(name, image, comment)
 
 
-# review.html
-@app.route('/date', methods=['POST'])
-def upload_file():
-    target = os.path.join(APP_ROOT, 'images')
-    img_receive = request.files['post-img']
-    name_receive = request.form['post-nickname']
-    title_receive = request.form['post-title']
-    loc_receive = request.form['post-location']
-    comment_receive = request.form['post-comment']
+# 날씨
 
-    review = {'nickname': name_receive, 'title': title_receive, 'parkLoc': loc_receive, 'img': img_receive,
-              'comment': comment_receive}
-
-    for upload in request.files.getlist("post-img"):  # multiple image handel
-        filename = secure_filename(upload.filename)
-        destination = "/".join([target, filename])
-        upload.save(destination)
-        review = {'nickname': name_receive, 'title': title_receive, 'parkLoc': loc_receive, 'img': filename,
-                  'comment': comment_receive}
-        db.reviews.insert(review)
-
-
-    # 3. mongoDB에 데이터를 넣기
-    # db.reviews.insert_one(review)
-
-    return redirect(url_for('review_date'))
-
-
-@app.route('/date_review', methods=['GET'])
-def read_reviews():
-    target = os.path.join(APP_ROOT, 'images')
-    result = list(db.reviews.find({}, {'_id': False}))
-    for i in result:
-       # i['img']
-        return send_from_directory(target,i['img'])
-
-    return jsonify({'result': 'success', 'reviews': result})
+# html = requests.get('https://search.naver.com/search.naver?query=날씨')
+#
+# soup = BeautifulSoup(html.text, 'html.parser')
+#
+# data1 = soup.find('div', {'class': 'weather_box'})
+#
+# find_address = data1.find('span', {'class':'btn_select'}).text
+# print('현재 위치: '+find_address)
+#
+# find_currenttemp = data1.find('span',{'class': 'todaytemp'}).text
+# print('현재 온도: '+find_currenttemp+'℃')
+#
+# data2 = data1.findAll('dd')
+# find_dust = data2[0].find('span', {'class':'num'}).text
+# find_ultra_dust = data2[1].find('span', {'class':'num'}).text
+# find_ozone = data2[2].find('span', {'class':'num'}).text
+# print('현재 미세먼지: '+find_dust)
+# print('현재 초미세먼지: '+find_ultra_dust)
+# print('현재 오존지수: '+find_ozone)
 
 
 # 실행
 if __name__ == '__main__':
-    app.run('127.0.0.1', port=5000, debug=True)
+    app.run('127.0.0.1', port=5050, debug=True)
 
 
