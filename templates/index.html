@@ -141,7 +141,7 @@
 <header>
     <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-custom-2">
         <div class="container">
-            <a class="navbar-brand" href="#" target="_self">
+            <a class="navbar-brand" href="{{ url_for('index') }}" target="_self">
                 <strong>Lego, Hangang</strong>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -156,18 +156,23 @@
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">길 찾기</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="{{ url_for('show_location') }}" id="navbarDropdown" target="_self" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">길 찾기</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ url_for('show_location') }}" target="_self">길 찾기 (기본 ver.)</a>
+                            <a class="dropdown-item" href="{{ url_for('fastest_route') }}" target="_self">가장 가까운 한강공원찾기</a>
+                        </div>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">자전거 대여</a>
+                        <a class="nav-link" href="{{ url_for('show_bickeinfo') }}" target="_self">자전거 대여</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">피크닉 즐기기</a>
+                        <a class="nav-link" href="#" target="_self">피크닉 즐기기</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('review_date')}}">데이트 코스 추천</a>
+                        <a class="nav-link" href="{{ url_for('review_date') }}" target="_self">데이트 코스 추천</a>
                     </li>
                 </ul>
             </div>
@@ -232,7 +237,7 @@
                     <div class="card__content">
                         <div class="card__title">길 찾기</div>
                         <p class="card__text">지금 가장 빨리 갈 수 있는 한강공원은 어디일까요? 현 위치에서 가장 가까운 한강공원까지의 경로 및 원하는 한강공원까지의 경로를 확인해보세요!</p>
-                        <button class="btn btn--block btn-1">Let's go</button>
+                        <button class="btn btn--block btn-1" onclick="location.href='/howtogo'">Let's go</button>
                     </div>
                 </div>
             </li>
@@ -242,9 +247,7 @@
                     <div class="card__content">
                         <div class="card__title">자전거 대여소</div>
                         <p class="card__text">현 위치에서 가장 가까운 한강 자전거 대여소의 위치와 주변 따릉이 위치를 확인해보세요.</p>
-                        <form action="/date">
-                            <button class="btn btn--block btn-2" type="submit">Let's go</button>
-                        </form>
+                            <button class="btn btn--block btn-2" onclick="location.href='/bicycle'">Let's go</button>
                     </div>
                 </div>
             </li>
@@ -254,7 +257,7 @@
                     <div class="card__content">
                         <div class="card__title">피크닉 즐기기</div>
                         <p class="card__text">한강공원 근처에서 피크닉세트, 텐트, 레저용품, 캠핑 세트 등 다양한 물품을 대여할 수 있는 곳들의 정보를 보여줍니다. 한강공원에서 더 멋진 시간을 만들어보세요!</p>
-                        <button class="btn btn--block btn-3">Let's go</button>
+                        <button class="btn btn--block btn-3" onclick="location.href='/place'">Let's go</button>
                     </div>
                 </div>
             </li>
@@ -265,7 +268,7 @@
                         <div class="card__title">데이트 코스 추천</div>
                         <p class="card__text">한강공원을 포함한 좋은 데이트 코스, 친구들과 함께 한 추억이 있다면 공유해 주세요. 공원에 대한 후기, 그 주변의 상권에 대한 후기
                             등 다양한 리뷰를 등록해보세요.</p>
-                        <button class="btn btn--block btn-3">Let's go</button>
+                        <button class="btn btn--block btn-3" onclick="location.href='/review'">Let's go</button>
                     </div>
                 </div>
             </li>
@@ -273,7 +276,7 @@
     </div>
 
 
-
+    <div class="=information">
     <div class="col-md-3 weather-wrapper">
         <div class="weather-card madrid">
             <div class="weather-icon sun"></div>
@@ -281,6 +284,12 @@
             <p>Madrid</p>
         </div>
     </div>
+    <div class="col-md-9">
+        <div class="announce-card">
+            <h2>🌐 보다 다양한 정보는 아래 사이트에서 살펴보세요!</h2>
+        </div>
+    </div>
+        </div>
     <!--end-->
 
     <hr class="featurette-divider">

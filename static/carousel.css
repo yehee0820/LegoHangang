@@ -3,17 +3,6 @@
 /* Padding below the footer and lighter body text */
 
 /*footer bubbles*/
-body {
-    padding-top: 3em;
-    padding-bottom: 3em;
-    display: grid;
-    grid-template-rows: 1fr auto;
-    grid-template-areas: "main" "footer";
-    overflow-x: hidden;
-    background: whitesmoke;
-    min-height: 100vh;
-    font-family: 'Open Sans', sans-serif;
-}
 
 body .footer {
     z-index: 1;
@@ -414,19 +403,19 @@ img .info_card {
 }
 
 .card__image--flower {
-    background-image: url('https://postfiles.pstatic.net/MjAyMDA4MDFfMjg0/MDAxNTk2MjYxOTg2Njc4.bVFdFnM3bTHxrMGxQpGchdWK2z705yDl6gZ2YIVGRAIg.7ngXBlvTz9O4TE_xiPN9hH3AYe2uq-ZTupnp8ZadYP8g.JPEG.yehee0820/SE-17866cba-5626-4eea-911d-735a7d95c352.jpg?type=w773');
+    background-image: url('../static/images/main/flower.jpeg');
 }
 
 .card__image--love {
-    background-image: url('https://postfiles.pstatic.net/MjAyMDAxMzBfMjYw/MDAxNTgwMzUxNDkxNDc3.JHDWfIFp3CR2gV383XYRBFR22tGug9aX2AOxWUhx3nMg.gJYEEY_fIHLDrtvFEO3b3_sGK3H49csVs2_44dICvR0g.JPEG.yehee0820/000010.JPG?type=w773');
+    background-image: url('../static/images/main/date.jpeg');
 }
 
 .card__image--bike {
-    background-image: url('https://postfiles.pstatic.net/MjAyMDA5MDJfMTI3/MDAxNTk5MDE0OTE3MzIy._t4pbMomS1RlGnwpn3pIkDRb_u6l1EpyEiIJf_bKNgMg.Onx6kWLgN2mRaNb5ElvcN27JWMzfCWa9qfpKj4I1fqYg.JPEG.yehee0820/SE-c50f005a-ca4e-43a2-9491-c0f046e8b94f.jpg?type=w773');
+    background-image: url('../static/images/main/bike.jpg');
 }
 
 .card__image--location {
-    background-image: url('https://postfiles.pstatic.net/MjAyMDAxMzBfMjA2/MDAxNTgwMzUxNDkxNDAz.eibApecVM9WK7QMNqmqU_An8uPwxxp0RqMn8VP4uWMEg.yCuOGu2MtHvRHTMveyqgCDeKSeZc6_5qwlB9bSafFv0g.JPEG.yehee0820/000018.JPG?type=w773');
+    background-image: url('../static/images/main/location.jpeg');
 }
 
 .card__title {

@@ -24,7 +24,11 @@
 
     <link href="../static/navbar.css" rel="stylesheet">
 
-
+    <style>
+        .jumbotron{
+            padding-top: 15px;
+        }
+    </style>
     <!--navbar javascript-->
     <script>
         $(document).ready(function () {
@@ -42,45 +46,27 @@
         function BikeInfo() {
 
             bikeLoc = $("#inputGroupSelect").val()
-            if (bikeLoc == 1) {
-                bikeLoc == 'yeouido'
-            } else if (bikeLoc == 2) {
-                bikeLoc == 'nanji'
-            } else if (bikeLoc == 11) {
-                bikeLoc == 'banpo'
-            } else if (bikeLoc == 4) {
-                bikeLoc == 'gwangnaru'
-            } else if (bikeLoc == 9) {
-                bikeLoc == 'ichon'
-            } else if (bikeLoc == 3) {
-                bikeLoc == 'dduksum'
-            } else if (bikeLoc == 5) {
-                bikeLoc == 'gangseo'
-            } else if (bikeLoc == 8) {
-                bikeLoc == 'yangwha'
-            } else if (bikeLoc == 10) {
-                bikeLoc == 'jamwon'
-            } else if (bikeLoc == 6) {
-                bikeLoc == 'jamsil'
-            } else {
-                bikeLoc == 'mangwon'
-            }
-            alert(bikeLoc)
             $.ajax({
                 type: 'GET',
-                url: '/bicycle_locate?locate='+bikeLoc,
-                data: {
-                },
+                url: '/bicycle_locate?locate=' + bikeLoc,
+                data: {},
                 success: function (response) {
                     console.log(response)
+                    rentBike()
                 }
             })
         }
     </script>
 
     <style>
-        .jumbotron{
+        .jumbotron {
             margin-top: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .bikemap {
+
+            left: 350px;
         }
 
     </style>
@@ -90,7 +76,7 @@
 <header>
     <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-custom-2">
         <div class="container">
-            <a class="navbar-brand" href="#" target="_self">
+            <a class="navbar-brand" href="{{ url_for('index') }}" target="_self">
                 <strong>Lego, Hangang</strong>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -106,23 +92,25 @@
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" target="_self" role="button"
-                           data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">공원별정보</a>
+                        <a class="nav-link dropdown-toggle" href="{{ url_for('show_location') }}" id="navbarDropdown"
+                           target="_self" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">길 찾기</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url_for('show_location') }}">위치</a>
-                            <a class="dropdown-item" href="#">자전거 대여</a>
+                            <a class="dropdown-item" href="{{ url_for('show_location') }}" target="_self">길 찾기 (기본
+                                ver.)</a>
+                            <a class="dropdown-item" href="{{ url_for('fastest_route') }}" target="_self">가장 가까운
+                                한강공원찾기</a>
                         </div>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">날씨 정보</a>
+                        <a class="nav-link" href="{{ url_for('show_bickeinfo') }}" target="_self">자전거 대여</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="place.html">주변핫플찾기</a>
+                        <a class="nav-link" href="#" target="_self">피크닉 즐기기</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('review_date') }}">데이트 코스 추천</a>
+                        <a class="nav-link" href="{{ url_for('review_date') }}" target="_self">데이트 코스 추천</a>
                     </li>
                 </ul>
             </div>
@@ -150,13 +138,75 @@
             <option value="10">잠원한강공원</option>
             <option value="11">반포한강공원</option>
         </select>
-        <p class="lead input-group-append">
+        <p class="input-group-append">
             <button class="btn btn-outline-secondary" type="button" onclick="BikeInfo()">대여소 찾기</button>
         </p>
     </div>
 </div>
 
+<div id="map" class="bikemap" style="width:700px;height:400px;"></div>
+<script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=64f1a30f4caf860f650773260f5a246a&libraries=LIBRARY"></script>
+<script>
+    let sx = 0;
+    let sy = 0;
+    let ex = 0;
+    let ey = 0;
 
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new kakao.maps.LatLng(37.56714, 126.98327), // 지도의 중심좌표
+            level: 3, // 지도의 확대 레벨
+            mapTypeId: kakao.maps.MapTypeId.ROADMAP // 지도종류
+        };
+
+    // 지도를 생성한다
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+    // 지도 타입 변경 컨트롤을 생성한다
+    var mapTypeControl = new kakao.maps.MapTypeControl();
+
+    // 지도의 상단 우측에 지도 타입 변경 컨트롤을 추가한다
+    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
+    // 지도에 확대 축소 컨트롤을 생성한다
+    var zoomControl = new kakao.maps.ZoomControl();
+
+    // 지도의 우측에 확대 축소 컨트롤을 추가한다
+    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+
+    function rentBike() {
+        $.ajax({
+            type: 'GET',
+            url: '/bicycle_locate',
+            data: {},
+            success: function (response) {
+                latitude = response['latitude']['1'];
+                longitude = response['longitude']['1'];
+
+                var markerPosition = new kakao.maps.LatLng(latitude, longitude);
+                var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                    mapOption = {
+                        center: new kakao.maps.LatLng(latitude, longitude), // 지도의 중심좌표
+                        level: 3, // 지도의 확대 레벨
+                        mapTypeId: kakao.maps.MapTypeId.ROADMAP // 지도종류
+                    };
+
+                var map = new kakao.maps.Map(mapContainer, mapOption);
+                var marker = new kakao.maps.Marker({
+                    position: markerPosition
+                });
+
+                // 마커가 지도 위에 표시되도록 설정합니다
+                marker.setMap(map);
+
+
+            }
+        })
+    }
+
+</script>
 
 </body>
 </html>

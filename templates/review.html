@@ -1,0 +1,291 @@
+<!Doctype html>
+<html lang="ko">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    <link href="../static/navbar.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="../static/images/main/favicon.ico">
+    <title>데이트 코스 추천</title>
+
+    <!--navbar javascript-->
+    <script>
+        $(document).ready(function () {
+            $('#navbarDropdown').mouseenter(function () {
+                $('.dropdown-menu').slideToggle(300, "linear");
+            });
+
+            $('.dropdown-menu').mouseleave(function () {
+                $(this).slideToggle(300, "linear");
+            });
+        });
+    </script>
+
+
+    <!-- style -->
+    <style>
+        .wrap {
+            width: 900px;
+            margin: auto;
+        }
+
+        .comment {
+            color: #709fbe;
+            font-weight: bold;
+        }
+
+        #post-box {
+            width: 500px;
+            margin: 20px auto;
+            padding: 50px;
+            border: #b6cede solid;
+            border-radius: 5px;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+                $("#cards-box").html("");
+                showReviews();
+            });
+
+        function showReviews() {
+                $.ajax({
+                    type: "GET",
+                    url: "/memo",
+                    data: {},
+                    success: function (response) {
+                        let reviews = response["reviews"];
+                        for (let i = 0; i < reviews.length; i++) {
+                            makeCard(reviews["id"], reviews["title"], reviews["park"], reviews["comment"]);
+                        }
+                    }
+                })
+            }
+
+        function postReview() {
+                let id = $("#post-id").val();
+                let title = $("#post-title").val();
+                let parkval = $("#post-location").val();
+                if (parkval == 1){
+                    parkname='여의도'
+                }else if (parkval == 2) {
+                    parkname = '난지'
+                }else if (parkval == 3){
+                    parkname='뚝섬'
+                }else if (parkval == 4){
+                    parkname='광나루'
+                }else if (parkval == 5){
+                    parkname='강서'
+                }else if (parkval == 6){
+                    parkname='잠실'
+                }else if (parkval == 7){
+                    parkname='망원'
+                }else if (parkval == 8){
+                    parkname='양화'
+                }else if (parkval == 9){
+                    parkname='이촌'
+                }else if (parkval == 10){
+                    parkname='잠원'
+                }else{
+                    parkname='반포'
+                }
+
+                let comment = $("#post-comment").val();
+
+                // 2. memo에 POST 방식으로 메모 생성 요청하기
+                $.ajax({
+                    type: "POST", // POST 방식으로 요청하겠다.
+                    url: "/memo", // /memo라는 url에 요청하겠다.
+                    data: {id_give: id, title_give: title, park_give: parkname, comment_give: comment}, // 데이터를 주는 방법
+                    success: function (response) { // 성공하면
+                        if (response["result"] == "success") {
+                            alert("포스팅 성공!");
+                            // 3. 성공 시 페이지 새로고침하기
+                            window.location.reload();
+                        } else {
+                            alert("서버 오류!");
+                        }
+                    }
+                })
+            }
+
+        function makeCard(id, title, park, comment) {
+            let tempHtml = `<div class="card">
+                                <div class="card-body">
+                                    <p class="card-text">${title}</a>
+                                    <p class="card-text">${id}</a>
+                                    <p class="card-text">${park}</p>
+                                    <p class="card-text comment">${comment}</p>
+                                </div>
+                            </div>`;
+            $("#cards-box").append(tempHtml);
+        }
+
+        function openClose() {
+                // id 값 post-box의 display 값이 block 이면(= 눈에 보이면)
+                if ($("#post-box").css("display") == "block") {
+                    // post-box를 가리고
+                    $("#post-box").hide();
+                    // 다시 버튼을 클릭하면, 박스 열기를 할 수 있게 텍스트 바꿔두기
+                    $("#btn-post-box").text("포스팅 박스 열기");
+                } else {
+                    // 아니면(눈에 보이지 않으면) post-box를 펴라
+                    $("#post-box").show();
+                    // 다시 버튼을 클릭하면, 박스 닫기를 할 수 있게 텍스트 바꿔두기
+                    $("#btn-post-box").text("포스팅 박스 닫기");
+                }
+            }
+    </script>
+
+</head>
+
+<body>
+
+<header>
+    <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-custom-2">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}" target="_self">
+                <strong>Lego, Hangang</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}" target="_self">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="{{ url_for('show_location') }}" id="navbarDropdown" target="_self" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">길 찾기</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ url_for('show_location') }}" target="_self">길 찾기 (기본 ver.)</a>
+                            <a class="dropdown-item" href="{{ url_for('fastest_route') }}" target="_self">가장 가까운 한강공원찾기</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('show_bickeinfo') }}" target="_self">자전거 대여</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" target="_self">피크닉 즐기기</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('review_date') }}" target="_self">데이트 코스 추천</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="wrap">
+    <div class="jumbotron">
+        <h1 class="display-4">데이트 코스 추천</h1>
+        <p class="lead">여러 한강공원에서의 데이트 코스, 맛집, 공원 시설 등에 대한 리뷰를 공유하는 공간입니다.</p>
+        <hr class="my-4">
+        <p class="lead">
+            <button onclick="openClose()" id="btn-post-box" type="button" class="btn btn-primary">포스팅 박스 열기
+            </button>
+        </p>
+    </div>
+    <div id="post-box" class="form-post" style="display:none">
+        <div>
+            <div class="form-group">
+                <label for="post-title">리뷰 제목</label>
+                <input id="post-title" class="form-control" placeholder="">
+            </div>
+            <div class="form-group">
+                <label for="post-id">작성자 아이디</label>
+                <input id="post-id" class="form-control" placeholder="">
+            </div>
+            <div>
+                <label for="post-location">한강공원 위치</label>
+                <select id="post-location" name="post-location" class="custom-select" rows="2">
+                    <option selected>어느 지역에 대한 리뷰인가요?</option>
+                    <option value="1">여의도</option>
+                    <option value="2">난지</option>
+                    <option value="3">뚝섬</option>
+                    <option value="4">광나루</option>
+                    <option value="5">강서</option>
+                    <option value="6">잠실</option>
+                    <option value="7">망원</option>
+                    <option value="8">양화</option>
+                    <option value="9">이촌</option>
+                    <option value="10">잠원</option>
+                    <option value="11">반포</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="post-comment">리뷰 내용</label>
+                <textarea id="post-comment" class="form-control" rows="5"></textarea>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="postReview()">리뷰 업로드</button>
+        </div>
+    </div>
+
+    <div id="cards-box" class="card-columns">
+        <div class="card">
+
+            <div class="card-body">
+                <p class="card-title">리뷰 제목</p>
+                <p class="card-text">작성자 아이디</p>
+                <p class="card-text">선택한 공원은?</p>
+                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
+            </div>
+            <div class="card-body">
+                <p class="card-title">리뷰 제목</p>
+                <p class="card-text">작성자 아이디</p>
+                <p class="card-text">선택한 공원은?</p>
+                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
+            </div>
+            <div class="card-body">
+                <p class="card-title">리뷰 제목</p>
+                <p class="card-text">작성자 아이디</p>
+                <p class="card-text">선택한 공원은?</p>
+                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
+            </div>
+            <div class="card-body">
+                <p class="card-title">리뷰 제목</p>
+                <p class="card-text">작성자 아이디</p>
+                <p class="card-text">선택한 공원은?</p>
+                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
+            </div>
+            <div class="card-body">
+                <p class="card-title">리뷰 제목</p>
+                <p class="card-text">작성자 아이디</p>
+                <p class="card-text">선택한 공원은?</p>
+                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
+            </div>
+            <div class="card-body">
+                <p class="card-title">리뷰 제목</p>
+                <p class="card-text">작성자 아이디</p>
+                <p class="card-text">선택한 공원은?</p>
+                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+</body>
+
+</html>

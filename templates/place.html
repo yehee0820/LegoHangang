@@ -87,6 +87,48 @@
 </head>
 <body>
 
+<header>
+    <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-custom-2">
+        <div class="container">
+            <a class="navbar-brand" href="#" target="_self">
+                <strong>Lego, Hangang</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}" target="_self">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="{{ url_for('show_location') }}" id="navbarDropdown" target="_self" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">길 찾기</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ url_for('show_location') }}" target="_self">길 찾기 (기본 ver.)</a>
+                            <a class="dropdown-item" href="{{ url_for('fastest_route') }}" target="_self">가장 가까운 한강공원찾기</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('show_bickeinfo') }}" target="_self">자전거 대여</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" target="_self">피크닉 즐기기</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('review_date') }}" target="_self">데이트 코스 추천</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
 <script src="/api_controller.js"></script>
 
 <div id=cards-box class="grid">

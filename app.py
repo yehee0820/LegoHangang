@@ -14,18 +14,21 @@ db = client.hangangdb  # 'dbsparta'라는 이름의 db를 만듭니다.
 
 @app.route('/')
 def index():
-    return render_template('bicycle.html')
+    return render_template('index.html')
 
-@app.route('/date')
+@app.route('/review')
 def review_date():
-    return render_template('upload.html')
+    return render_template('review.html')
 
-@app.route('/get_location')
+@app.route('/howtogo')
 def show_location():
     return render_template('location.html')
+@app.route('/fastestway')
+def fastest_route():
+    return render_template('location2.html')
 
 @app.route('/bicycle')
-def show_bicycle_info():
+def show_bickeinfo():
     return render_template('bicycle.html')
 
 ###### review image uploading
@@ -47,6 +50,30 @@ def test():
     filename = 'static/uploadimg/sparta.png'
     return render_template('test.html',filename=filename)
 
+###review(메모장활용)
+@app.route('/memo', methods=['POST'])
+def post_reviews():
+    # 1. 클라이언트로부터 데이터를 받기
+    id_receive = request.form['id_give']
+    title_receive = request.form['title_give']
+    park_receive = request.form['park_give']
+    comment_receive = request.form['comment_give']
+
+    review = {'title': title_receive, 'id': id_receive, 'park': park_receive, 'comment': comment_receive}
+
+    # 3. mongoDB에 데이터를 넣기
+    db.reviews.insert_one(review)
+
+    return jsonify({'result': 'success'})
+
+
+@app.route('/memo', methods=['GET'])
+def read_reviews():
+    # 1. mongoDB에서 _id 값을 제외한 모든 데이터 조회해오기 (Read)
+    result = list(db.reviews.find({}, {'_id': 0}))
+    # 2. articles라는 키 값으로 article 정보 보내주기
+    return jsonify({'result': 'success', 'reviews': result})
+
 ##########################
 #bicycle_info
 ##########################
@@ -60,9 +87,9 @@ def getBikeInfo(location):
     excel_dir = os.path.join(base_dir, excel_file)
 
     # read a excel file and make it as a DataFrame
-    if location=='yeouido':
+    if location == 1:
         df_bicycle = pd.read_excel(excel_dir,
-                                  sheet_name = 'sheet',
+                                  sheet_name = 'yeouido',
                                   names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
                                   dtype = {'id':int, 'location': str,
                                              'where': str,
@@ -72,9 +99,10 @@ def getBikeInfo(location):
                                   index_col = 'id',
                                   na_values = ',',
                                   comment = '#')
-    elif location == 'nanji':
+        df = pd.DataFrame(df_bicycle)
+    elif location == 2:
         df_bicycle = pd.read_excel(excel_dir,
-                                  sheet_name = 'sheet',
+                                  sheet_name = 'nanji',
                                   names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
                                   dtype = {'id':int, 'location': str,
                                              'where': str,
@@ -84,9 +112,10 @@ def getBikeInfo(location):
                                   index_col = 'id',
                                   na_values = ',',
                                   comment = '#')
-    elif location == 'dduksum':
+        df = pd.DataFrame(df_bicycle)
+    elif location == 3:
         df_bicycle = pd.read_excel(excel_dir,
-                                  sheet_name = 'sheet',
+                                  sheet_name = 'dduksum',
                                   names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
                                   dtype = {'id':int, 'location': str,
                                              'where': str,
@@ -96,9 +125,10 @@ def getBikeInfo(location):
                                   index_col = 'id',
                                   na_values = ',',
                                   comment = '#')
-    elif location == 'jamsil':
+        df = pd.DataFrame(df_bicycle)
+    elif location == 4:
         df_bicycle = pd.read_excel(excel_dir,
-                                  sheet_name = 'sheet',
+                                  sheet_name = 'gwangnaru',
                                   names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
                                   dtype = {'id':int, 'location': str,
                                              'where': str,
@@ -108,9 +138,10 @@ def getBikeInfo(location):
                                   index_col = 'id',
                                   na_values = ',',
                                   comment = '#')
-    elif location == 'jamwon':
+        df = pd.DataFrame(df_bicycle)
+    elif location == 5:
         df_bicycle = pd.read_excel(excel_dir,
-                                  sheet_name = 'sheet',
+                                  sheet_name = 'gangseo',
                                   names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
                                   dtype = {'id':int, 'location': str,
                                              'where': str,
@@ -120,9 +151,10 @@ def getBikeInfo(location):
                                   index_col = 'id',
                                   na_values = ',',
                                   comment = '#')
-    elif location == 'gwangnaru':
+        df = pd.DataFrame(df_bicycle)
+    elif location == 6:
         df_bicycle = pd.read_excel(excel_dir,
-                                  sheet_name = 'sheet',
+                                  sheet_name = 'jamsil',
                                   names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
                                   dtype = {'id':int, 'location': str,
                                              'where': str,
@@ -132,9 +164,10 @@ def getBikeInfo(location):
                                   index_col = 'id',
                                   na_values = ',',
                                   comment = '#')
-    elif location == 'yangwha':
+        df = pd.DataFrame(df_bicycle)
+    elif location == 7:
         df_bicycle = pd.read_excel(excel_dir,
-                                  sheet_name = 'sheet',
+                                  sheet_name = 'mangwon',
                                   names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
                                   dtype = {'id':int, 'location': str,
                                              'where': str,
@@ -144,9 +177,10 @@ def getBikeInfo(location):
                                   index_col = 'id',
                                   na_values = ',',
                                   comment = '#')
-    elif location == 'gangseo':
+        df = pd.DataFrame(df_bicycle)
+    elif location == 8:
         df_bicycle = pd.read_excel(excel_dir,
-                                  sheet_name = 'sheet',
+                                  sheet_name = 'yangwha',
                                   names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
                                   dtype = {'id':int, 'location': str,
                                              'where': str,
@@ -156,9 +190,10 @@ def getBikeInfo(location):
                                   index_col = 'id',
                                   na_values = ',',
                                   comment = '#')
-    elif location == 'banpo':
+        df = pd.DataFrame(df_bicycle)
+    elif location == 9:
         df_bicycle = pd.read_excel(excel_dir,
-                                  sheet_name = 'sheet',
+                                  sheet_name = 'ichon',
                                   names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
                                   dtype = {'id':int, 'location': str,
                                              'where': str,
@@ -168,11 +203,12 @@ def getBikeInfo(location):
                                   index_col = 'id',
                                   na_values = ',',
                                   comment = '#')
-    elif location == 'ichon':
+        df = pd.DataFrame(df_bicycle)
+    elif location == 10:
         df_bicycle = pd.read_excel(excel_dir,
-                                  sheet_name = 'sheet',
+                                  sheet_name = 'jamwon',
                                   names = ['id', 'location', 'where', 'address', 'latitude', 'longitude'],
-                                  dtype = {'id':int, 'location': str,
+                                  dtype = {'id': int, 'location': str,
                                              'where': str,
                                              'address': str,
                                              'latitude': float,
@@ -180,9 +216,10 @@ def getBikeInfo(location):
                                   index_col = 'id',
                                   na_values = ',',
                                   comment = '#')
+        df = pd.DataFrame(df_bicycle)
     else:
         df_bicycle = pd.read_excel(excel_dir,
-                                   sheet_name='sheet',
+                                   sheet_name='banpo',
                                    names=['id', 'location', 'where', 'address', 'latitude', 'longitude'],
                                    dtype={'id': int, 'location': str,
                                           'where': str,
@@ -192,18 +229,24 @@ def getBikeInfo(location):
                                    index_col='id',
                                    na_values=',',
                                    comment='#')
-    return df_bicycle
+        df = pd.DataFrame(df_bicycle)
+
+    convert_bicycle = df.to_dict()
+    return convert_bicycle
 
 @app.route("/bicycle_locate", methods=["GET"])
 def my_excel_data():
-    q = request.args.get('locate')  # q는 dducksum
+    q = request.args.get('locate')
 
     data = getBikeInfo(q)
     print("#######################")
     print(data)
     print("#######################")
     # 돌아오는 data는 dataframe이기 때문에 data to list변환을 해주어야합니다.
-    convert_data = data.values.tolist()
+    df_data = pd.DataFrame(data)
+    convert_data = df_data.to_dict()
+    print(convert_data)
+
     return convert_data
 
 
@@ -211,9 +254,9 @@ def my_excel_data():
 ##########################
 #rent_info
 ##########################
-base_dir = 'Users/yehee/Desktop/LegoHangang/LegoHangang'
-excel_file = 'static/rent_info.xlsx'
-excel_dir = os.path.join(base_dir, excel_file)
+# base_dir = 'Users/yehee/Desktop/LegoHangang/LegoHangang'
+# excel_file = 'static/rent_info.xlsx'
+# excel_dir = os.path.join(base_dir, excel_file)
 
 # read a excel file and make it as a DataFrame
 
@@ -369,6 +412,6 @@ def test_origin():
 
 # 실행
 if __name__ == '__main__':
-    app.run('127.0.0.1', port=5050, debug=True)
+    app.run('localhost', port=5000, debug=True)
 
 

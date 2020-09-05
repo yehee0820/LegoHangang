@@ -5,7 +5,7 @@
     <link rel="shortcut icon" href="../static/images/main/favicon.ico">
 
     <!-- Webpage Title -->
-    <title>길 찾기</title>
+    <title>가장 가까운 공원찾기</title>
 
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -23,7 +23,7 @@
             crossorigin="anonymous"></script>
 
     <link href="../static/navbar.css" rel="stylesheet">
-
+    <link href="../static/bubblefooter.css" rel="stylesheet">
 
 
     <!--navbar javascript-->
@@ -38,7 +38,6 @@
             });
         });
     </script>
-
 
 
     <style>
@@ -113,34 +112,17 @@
 
 <div class="wrap">
     <div class="jumbotron">
-        <h1 class="display-4">길 찾기</h1>
-        <p class="lead">현위치에서 한강으로 가는 길을 안내합니다. (위치정보 허용)</p>
-        <hr class="my-4">
+        <h1 class="display-4">가장 가까운 한강찾기</h1>
+        <p class="lead">현위치에서 가장 가까운 한강공원의 위치 및 길 찾기 정보를 제공합니다. (위치정보 허용)</p>
         <div class="input-group">
-            <select class="custom-select" id="inputGroupSelect" aria-label="Example select with button addon">
-                <option selected>가고자 하는 한강공원을 선택하세요</option>
-                <option value="1">여의도한강공원</option>
-                <option value="2">난지한강공원</option>
-                <option value="3">뚝섬한강공원</option>
-                <option value="4">광나루한강공원</option>
-                <option value="5">강서한강공원</option>
-                <option value="6">잠실한강공원</option>
-                <option value="7">망원한강공원</option>
-                <option value="8">양화한강공원</option>
-                <option value="9">이촌한강공원</option>
-                <option value="10">잠원한강공원</option>
-                <option value="11">반포한강공원</option>
-
-
-            </select>
             <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" onclick="find_loc()">길찾기</button>
+                <button class="btn btn-outline-secondary" type="button" onclick="find_loc()">내 위치에서 가장 가까운 한강공원은?
+                </button>
             </div>
         </div>
+        <hr class="featurette-divider">
+        <h4 id="Pname"></h4>
     </div>
-
-
-
     <hr class="featurette-divider">
     <div id="result-box" class="row">
         <div id="map" class="col-md-8" style="height:400px"></div> <!-- this is jido -->
@@ -153,108 +135,184 @@
     </div>
 </div>
 
-    <!-- Naver Developers에서 발급받은 네이버지도 Application Key 입력  -->
-    <script type="text/javascript"
-            src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=3hxpwhkwla"></script>
+
+<!-- Naver Developers에서 발급받은 네이버지도 Application Key 입력  -->
+<script type="text/javascript"
+        src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=3hxpwhkwla"></script>
 
 
-    <script>
-        var mapOptions = {
-            center: new naver.maps.LatLng(37.3595704, 127.105399),
-            zoom: 10
-        };
+<script>
+    var mapOptions = {
+        center: new naver.maps.LatLng(37.3595704, 127.105399),
+        zoom: 10
+    };
 
-        var map = new naver.maps.Map('map', mapOptions);
+    var map = new naver.maps.Map('map', mapOptions);
 
 
-        function find_loc() {
-             $("#route").empty();
-             $("#totalTime").empty();
-             map = new naver.maps.Map('map', mapOptions);
-            findMapTest()
+    function find_loc() {
+        $("#route").empty();
+        $("#totalTime").empty();
+        $("#Pname").empty();
+        map = new naver.maps.Map('map', mapOptions);
+        fastest_way()
+    }
+
+    let sx = 0;
+    let sy = 0;
+    let ex = 0;
+    let ey = 0;
+    let time = 0;
+
+    function fastest_way() {
+        if (navigator.geolocation) { // GPS를 지원하면
+            navigator.geolocation.getCurrentPosition(function (position) {
+                user_latitude = position.coords.latitude;
+                user_longitude = position.coords.longitude;
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/get_location',
+                    data: {
+                        user_latitude: user_latitude, user_longitude: user_longitude
+                    },
+                    success: function (response) {
+                        sx = response['result']['SX']
+                        sy = response['result']['SY']
+
+                        way1 = getInfo(sx, sy, 126.934312, 37.528538); //여의도
+                        way2 = getInfo(sx, sy, 126.876260, 37.566273); //난지
+                        way3 = getInfo(sx, sy, 127.071357, 37.529341); //뚝섬
+                        way4 = getInfo(sx, sy, 127.119979, 37.549213); //광나루
+                        way5 = getInfo(sx, sy, 126.815225, 37.588483); //강서
+                        way6 = getInfo(sx, sy, 127.081879, 37.518070); //잠실
+                        way7 = getInfo(sx, sy, 126.894570, 37.555939); //망원
+                        way8 = getInfo(sx, sy, 126.902319, 37.538522); //양화
+                        way9 = getInfo(sx, sy, 126.953173, 37.524391); //이촌
+                        way10 = getInfo(sx, sy, 127.011912, 37.521638); //잠원
+                        way11 = getInfo(sx, sy, 126.994680, 37.509900); //반포
+
+                        showMin(way1, way2, way3, way4, way5, way6, way7, way8, way9, way10, way11)
+                    }
+                })
+            }, function (error) {
+                console.error(error);
+            }, {
+                enableHighAccuracy: false,
+                maximumAge: 0,
+                timeout: Infinity
+            });
         }
 
+        function showMin(a, b, c, d, e, f, g, h, i, j, k) {
+            var array = [a, b, c, d, e, f, g, h, i, j, k];
+            var min = Math.min.apply(null, array);
 
-
-        let sx = 0;
-        let sy = 0;
-        let ex = 0;
-        let ey = 0;
-
-
-        function findMapTest() {
-            if (navigator.geolocation) { // GPS를 지원하면
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    user_latitude = position.coords.latitude;
-                    user_longitude = position.coords.longitude;
-
-                    $.ajax({
-                        type: 'POST',
-                        url: '/get_location',
-                        data: {
-                            user_latitude: user_latitude, user_longitude: user_longitude
-                        },
-                        success: function (response) {
-                            sx = response['result']['SX']
-                            sy = response['result']['SY']
-                            console.log(sx)
-                            console.log(sy)
-                            loc = $("#inputGroupSelect").val()
-                            if (loc == 1) {
-                                ey = 37.528538;
-                                ex = 126.934312;
-                            } else if (loc == 2) {
-                                ey = 37.566273;
-                                ex = 126.876260;
-                            } else if (loc == 3) {
-                                ey = 37.529341;
-                                ex = 127.071357;
-                            } else if (loc == 4) {
-                                ey = 37.549213;
-                                ex = 127.119979;
-                            } else if (loc == 5) {
-                                ey = 37.588483;
-                                ex = 126.815225;
-                            } else if (loc == 6) {
-                                ey = 37.518070;
-                                ex = 127.081879;
-                            } else if (loc == 7) {
-                                ey = 37.555939;
-                                ex = 126.894570;
-                            } else if (loc == 8) {
-                                ey = 37.538522;
-                                ex = 126.902319;
-                            } else if (loc == 9) {
-                                ey = 37.524391;
-                                ex = 126.953173;
-                            } else if (loc == 10) {
-                                ey = 37.521638;
-                                ex = 127.011912;
-                            } else {
-                                ey = 37.509900;
-                                ex = 126.994680;
-                            }
-
-                            searchPubTransPathAJAX(sx, sy, ex, ey);
-                            getInfo(sx, sy, ex, ey);
-
-                        }
-
-                    })
-                }, function (error) {
-                    console.error(error);
-                }, {
-                    enableHighAccuracy: false,
-                    maximumAge: 0,
-                    timeout: Infinity
-                });
+            if (min == a) {
+                ex = 126.934312;
+                ey = 37.528538;
+                showInfo(sx, sy, ex, ey)
+                searchPubTransPathAJAX(sx, sy, ex, ey)
+                $("#Pname").append('🐳 여의도한강공원 🐳')
+            } else if (min == b) {
+                ex = 126.876260;
+                ey = 37.566273;
+                showInfo(sx, sy, ex, ey)
+                searchPubTransPathAJAX(sx, sy, ex, ey)
+                $("#Pname").append('🐳 난지한강공원 🐳')
+            } else if (min == c) {
+                ex = 127.071357;
+                ey = 37.529341;
+                showInfo(sx, sy, ex, ey)
+                searchPubTransPathAJAX(sx, sy, ex, ey)
+                $("#Pname").append('🐳 뚝섬한강공원 🐳')
+            } else if (min == d) {
+                ex = 127.119979;
+                ey = 37.549213;
+                showInfo(sx, sy, ex, ey)
+                searchPubTransPathAJAX(sx, sy, ex, ey)
+                $("#Pname").append('🐳 광나루한강공원 🐳')
+            } else if (min == e) {
+                ex = 126.815225;
+                ey = 37.588483;
+                showInfo(sx, sy, ex, ey)
+                searchPubTransPathAJAX(sx, sy, ex, ey)
+                $("#Pname").append('🐳 강서한강공원 🐳')
+            } else if (min == f) {
+                ex = 127.081879;
+                ey = 37.518070;
+                showInfo(sx, sy, ex, ey)
+                searchPubTransPathAJAX(sx, sy, ex, ey)
+                $("#Pname").append('🐳 잠실한강공원 🐳')
+            } else if (min == g) {
+                ex = 126.894570;
+                ey = 37.555939;
+                showInfo(sx, sy, ex, ey)
+                searchPubTransPathAJAX(sx, sy, ex, ey)
+                $("#Pname").append('🐳 망원한강공원 🐳')
+            } else if (min == h) {
+                ex = 126.902319;
+                ey = 37.538522;
+                showInfo(sx, sy, ex, ey)
+                searchPubTransPathAJAX(sx, sy, ex, ey)
+                $("#Pname").append('🐳 양화한강공원 🐳')
+            } else if (min == i) {
+                ex = 126.953173;
+                ey = 37.524391;
+                showInfo(sx, sy, ex, ey)
+                searchPubTransPathAJAX(sx, sy, ex, ey)
+                $("#Pname").append('🐳 이촌한강공원 🐳')
+            } else if (min == j) {
+                ex = 127.011912;
+                ey = 37.521638;
+                showInfo(sx, sy, ex, ey)
+                searchPubTransPathAJAX(sx, sy, ex, ey)
+                $("#Pname").append('🐳 잠원한강공원 🐳')
+            } else {
+                ex = 126.994680;
+                ey = 37.509900;
+                showInfo(sx, sy, ex, ey)
+                searchPubTransPathAJAX(sx, sy, ex, ey)
+                $("#Pname").append('🐳 반포한강공원 🐳')
             }
         }
 
 
-        let m = 1;
-
         function getInfo(sx, sy, ex, ey) {
+            var xhr = new XMLHttpRequest();
+            //ODsay apiKey 입력
+            var url = "https://api.odsay.com/v1/api/searchPubTransPath?SX=" + sx + "&SY=" + sy + "&EX=" + ex + "&EY=" + ey + "&apiKey=zZOOCFJaccyfaXpDSn6kJaK%2BV5CTfh4tdW7Bp4Mg2Jo";
+            xhr.open("GET", url, true);
+            xhr.send();
+            xhr.onreadystatechange = function () {
+
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    let subpath = (JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"]
+                    let path = (JSON.parse(xhr.responseText))["result"]["path"][0]
+
+                    time = path["info"]["totalTime"]
+                }
+            }
+            return time
+        }
+
+        function searchPubTransPathAJAX(sx, sy, ex, ey) {
+            var xhr = new XMLHttpRequest();
+            //ODsay apiKey 입력
+            var url = "https://api.odsay.com/v1/api/searchPubTransPath?SX=" + sx + "&SY=" + sy + "&EX=" + ex + "&EY=" + ey + "&apiKey=zZOOCFJaccyfaXpDSn6kJaK%2BV5CTfh4tdW7Bp4Mg2Jo";
+            xhr.open("GET", url, true);
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    console.log((JSON.parse(xhr.responseText))["result"]); // <- xhr.responseText 로 결과를 가져올 수 있음
+                    //노선그래픽 데이터 호출
+                    console.log((JSON.parse(xhr.responseText))['result']['path'][0]['info'])
+                    callMapObjApiAJAX((JSON.parse(xhr.responseText))["result"]["path"][0].info.mapObj);
+                }
+            }
+        }
+
+        function showInfo(sx, sy, ex, ey) {
             var xhr = new XMLHttpRequest();
             //ODsay apiKey 입력
             var url = "https://api.odsay.com/v1/api/searchPubTransPath?SX=" + sx + "&SY=" + sy + "&EX=" + ex + "&EY=" + ey + "&apiKey=zZOOCFJaccyfaXpDSn6kJaK%2BV5CTfh4tdW7Bp4Mg2Jo";
@@ -283,7 +341,7 @@
                         } else if (subpath[i]["trafficType"] == 2) {
                             txt = "<li>" + subpath[i]["startName"] + "-->"
                                 + subpath[i]["endName"] +
-                                " (" + subpath[i]["lane"][0]["busNo"] + "번 버스)" +"</li>"
+                                " (" + subpath[i]["lane"][0]["busNo"] + "번 버스)" + "</li>"
 
                             console.log(txt)
                             $("#route").append(txt)
@@ -293,7 +351,7 @@
                                 txt = "<li>" + "( 환승 )" + "</li>"
                                 $("#route").append("환승")
                             } else {
-                                 txt = "<li>" + "도보로 이동" + " (" + subpath[i]["sectionTime"] + "분 소요)" +"</li>"
+                                txt = "<li>" + "도보로 이동" + " (" + subpath[i]["sectionTime"] + "분 소요)" + "</li>"
 
                                 console.log(txt)
                                 $("#route").append(txt)
@@ -304,22 +362,6 @@
                 }
             }
 
-        }
-
-        function searchPubTransPathAJAX(sx, sy, ex, ey) {
-            var xhr = new XMLHttpRequest();
-            //ODsay apiKey 입력
-            var url = "https://api.odsay.com/v1/api/searchPubTransPath?SX=" + sx + "&SY=" + sy + "&EX=" + ex + "&EY=" + ey + "&apiKey=zZOOCFJaccyfaXpDSn6kJaK%2BV5CTfh4tdW7Bp4Mg2Jo";
-            xhr.open("GET", url, true);
-            xhr.send();
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    console.log((JSON.parse(xhr.responseText))["result"]); // <- xhr.responseText 로 결과를 가져올 수 있음
-                    //노선그래픽 데이터 호출
-                    console.log((JSON.parse(xhr.responseText))['result']['path'][0]['info'])
-                    callMapObjApiAJAX((JSON.parse(xhr.responseText))["result"]["path"][0].info.mapObj);
-                }
-            }
         }
 
         //길찾기 API 호출
@@ -511,7 +553,8 @@
                 }
             }
         }
-    </script>
+    }
+</script>
 
 
 </body>
