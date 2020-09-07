@@ -69,8 +69,10 @@
                     data: {},
                     success: function (response) {
                         let reviews = response["reviews"];
+                        console.log(reviews)
                         for (let i = 0; i < reviews.length; i++) {
-                            makeCard(reviews["id"], reviews["title"], reviews["park"], reviews["comment"]);
+
+                            makeCard(reviews[i]["id"], reviews[i]["title"], reviews[i]["park"], reviews[i]["comment"]);
                         }
                     }
                 })
