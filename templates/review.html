@@ -18,9 +18,85 @@
             crossorigin="anonymous"></script>
 
     <link href="../static/navbar.css" rel="stylesheet">
+    <link href="../static/button.css" rel="stylesheet">
 
     <link rel="shortcut icon" href="../static/images/main/favicon.ico">
     <title>데이트 코스 추천</title>
+
+    <script>
+        jQuery(function ($) {
+            $("body").css("display", "none");
+            $("body").fadeIn(1000);
+            $("a.transition").click(function (event) {
+                event.preventDefault();
+                linkLocation = this.href;
+                $("body").fadeOut(1000, redirectPage);
+            });
+
+            function redirectPage() {
+                window.location = linkLocation;
+            }
+        });
+    </script>
+
+    <style>
+        .jumbotron {
+            padding-bottom: 25px;
+            margin-bottom: 15px;
+        }
+
+        body {
+            margin: 50px;
+        }
+
+    </style>
+
+    <style>
+
+        body {
+            animation: fadein 1000ms ease-out;
+            -moz-animation: fadein 1000ms ease-out; /* Firefox */
+            -webkit-animation: fadein 1000ms ease-out; /* Safari and  Chrome */
+            -o-animation: fadein 1000ms ease-out; /* Opera */
+        }
+
+        @keyframes fadein {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @-moz-keyframes fadein { /* Firefox */
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes fadein { /* Safari and Chrome */
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @-o-keyframes fadein { /* Opera */
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+    </style>
 
     <!--navbar javascript-->
     <script>
@@ -38,15 +114,7 @@
 
     <!-- style -->
     <style>
-        .wrap {
-            width: 900px;
-            margin: auto;
-        }
 
-        .comment {
-            color: #709fbe;
-            font-weight: bold;
-        }
 
         #post-box {
             width: 500px;
@@ -55,102 +123,117 @@
             border: #b6cede solid;
             border-radius: 5px;
         }
+
+        .card {
+            background: #fff;
+            border-radius: 2px;
+            display: inline-block;
+            height: 300px;
+            margin: 1rem;
+            position: relative;
+            width: 300px;
+        }
+
+        .card-3 {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+        }
     </style>
     <script>
         $(document).ready(function () {
-                $("#cards-box").html("");
-                showReviews();
-            });
+            $("#cards-box").html("");
+            showReviews();
+        });
 
         function showReviews() {
-                $.ajax({
-                    type: "GET",
-                    url: "/memo",
-                    data: {},
-                    success: function (response) {
-                        let reviews = response["reviews"];
-                        console.log(reviews)
-                        for (let i = 0; i < reviews.length; i++) {
+            $.ajax({
+                type: "GET",
+                url: "/memo",
+                data: {},
+                success: function (response) {
+                    let reviews = response["reviews"];
+                    console.log(reviews)
+                    for (let i = 0; i < reviews.length; i++) {
 
-                            makeCard(reviews[i]["id"], reviews[i]["title"], reviews[i]["park"], reviews[i]["comment"]);
-                        }
+                        makeCard(reviews[i]["id"], reviews[i]["title"], reviews[i]["park"], reviews[i]["comment"]);
                     }
-                })
-            }
+                }
+            })
+        }
 
         function postReview() {
-                let id = $("#post-id").val();
-                let title = $("#post-title").val();
-                let parkval = $("#post-location").val();
-                if (parkval == 1){
-                    parkname='여의도'
-                }else if (parkval == 2) {
-                    parkname = '난지'
-                }else if (parkval == 3){
-                    parkname='뚝섬'
-                }else if (parkval == 4){
-                    parkname='광나루'
-                }else if (parkval == 5){
-                    parkname='강서'
-                }else if (parkval == 6){
-                    parkname='잠실'
-                }else if (parkval == 7){
-                    parkname='망원'
-                }else if (parkval == 8){
-                    parkname='양화'
-                }else if (parkval == 9){
-                    parkname='이촌'
-                }else if (parkval == 10){
-                    parkname='잠원'
-                }else{
-                    parkname='반포'
-                }
-
-                let comment = $("#post-comment").val();
-
-                // 2. memo에 POST 방식으로 메모 생성 요청하기
-                $.ajax({
-                    type: "POST", // POST 방식으로 요청하겠다.
-                    url: "/memo", // /memo라는 url에 요청하겠다.
-                    data: {id_give: id, title_give: title, park_give: parkname, comment_give: comment}, // 데이터를 주는 방법
-                    success: function (response) { // 성공하면
-                        if (response["result"] == "success") {
-                            alert("포스팅 성공!");
-                            // 3. 성공 시 페이지 새로고침하기
-                            window.location.reload();
-                        } else {
-                            alert("서버 오류!");
-                        }
-                    }
-                })
+            let id = $("#post-id").val();
+            let title = $("#post-title").val();
+            let parkval = $("#post-location").val();
+            if (parkval == 1) {
+                parkname = '여의도'
+            } else if (parkval == 2) {
+                parkname = '난지'
+            } else if (parkval == 3) {
+                parkname = '뚝섬'
+            } else if (parkval == 4) {
+                parkname = '광나루'
+            } else if (parkval == 5) {
+                parkname = '강서'
+            } else if (parkval == 6) {
+                parkname = '잠실'
+            } else if (parkval == 7) {
+                parkname = '망원'
+            } else if (parkval == 8) {
+                parkname = '양화'
+            } else if (parkval == 9) {
+                parkname = '이촌'
+            } else if (parkval == 10) {
+                parkname = '잠원'
+            } else {
+                parkname = '반포'
             }
 
+            let comment = $("#post-comment").val();
+
+            // 2. memo에 POST 방식으로 메모 생성 요청하기
+            $.ajax({
+                type: "POST", // POST 방식으로 요청하겠다.
+                url: "/memo", // /memo라는 url에 요청하겠다.
+                data: {id_give: id, title_give: title, park_give: parkname, comment_give: comment}, // 데이터를 주는 방법
+                success: function (response) { // 성공하면
+                    if (response["result"] == "success") {
+                        alert("포스팅 성공!");
+                        // 3. 성공 시 페이지 새로고침하기
+                        window.location.reload();
+                    } else {
+                        alert("서버 오류!");
+                    }
+                }
+            })
+        }
+
         function makeCard(id, title, park, comment) {
-            let tempHtml = `<div class="card">
+            let tempHtml = `<div class="card card-3">
                                 <div class="card-body">
-                                    <p class="card-text">${title}</a>
-                                    <p class="card-text">${id}</a>
-                                    <p class="card-text">${park}</p>
-                                    <p class="card-text comment">${comment}</p>
+                                    <p class="card-text"><strong style="background-color: #e6ecff; font-family: monospace; font-size: 16px;"> Title:</strong>  ${title}</p>
+                                    <p class="card-text"><strong style="background-color: #ffe3e2; font-family: monospace; font-size: 16px;"> User ID:</strong>  ${id}</p>
+                                    <p class="card-text"><strong style="background-color: lightblue; font-family: monospace; font-size: 16px;"> Location:</strong>  ${park}</p>
+                                    <p></p>
+                                    <p class="card-text comment"><strong style="background-color: palegoldenrod; color: black;font-family: monospace; font-size: 16px;"> Review:</strong>  <p>${comment}</p></p>
                                 </div>
                             </div>`;
             $("#cards-box").append(tempHtml);
         }
 
         function openClose() {
-                // id 값 post-box의 display 값이 block 이면(= 눈에 보이면)
-                if ($("#post-box").css("display") == "block") {
-                    // post-box를 가리고
-                    $("#post-box").hide();
-                    // 다시 버튼을 클릭하면, 박스 열기를 할 수 있게 텍스트 바꿔두기
-                    $("#btn-post-box").text("포스팅 박스 열기");
-                } else {
-                    // 아니면(눈에 보이지 않으면) post-box를 펴라
-                    $("#post-box").show();
-                    // 다시 버튼을 클릭하면, 박스 닫기를 할 수 있게 텍스트 바꿔두기
-                    $("#btn-post-box").text("포스팅 박스 닫기");
-                }
+            // id 값 post-box의 display 값이 block 이면(= 눈에 보이면)
+            if ($("#post-box").css("display") == "block") {
+                // post-box를 가리고
+                $("#post-box").hide();
+                // 다시 버튼을 클릭하면, 박스 열기를 할 수 있게 텍스트 바꿔두기
+                $("#btn-post-box").text("포스팅 박스 열기");
+            } else {
+                // 아니면(눈에 보이지 않으면) post-box를 펴라
+                $("#post-box").show();
+                // 다시 버튼을 클릭하면, 박스 닫기를 할 수 있게 텍스트 바꿔두기
+                $("#btn-post-box").text("포스팅 박스 닫기");
             }
+        }
     </script>
 
 </head>
@@ -176,11 +259,14 @@
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="{{ url_for('show_location') }}" id="navbarDropdown" target="_self" role="button"
+                        <a class="nav-link dropdown-toggle" href="{{ url_for('show_location') }}" id="navbarDropdown"
+                           target="_self" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">길 찾기</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url_for('show_location') }}" target="_self">길 찾기 (기본 ver.)</a>
-                            <a class="dropdown-item" href="{{ url_for('fastest_route') }}" target="_self">가장 가까운 한강공원찾기</a>
+                            <a class="dropdown-item" href="{{ url_for('show_location') }}" target="_self">길 찾기 (기본
+                                ver.)</a>
+                            <a class="dropdown-item" href="{{ url_for('fastest_route') }}" target="_self">가장 가까운
+                                한강공원찾기</a>
                         </div>
                     </li>
 
@@ -201,13 +287,13 @@
 
 <div class="wrap">
     <div class="jumbotron">
-        <h1 class="display-4">데이트 코스 추천</h1>
-        <p class="lead">여러 한강공원에서의 데이트 코스, 맛집, 공원 시설 등에 대한 리뷰를 공유하는 공간입니다.</p>
+        <h1 class="display-4" style="margin-bottom: 10px">데이트 코스 추천</h1>
+        <p class="lead" style="margin-bottom: 10px">여러 한강공원에서의 데이트 코스, 맛집, 공원 시설 등에 대한 리뷰를 공유하는 공간입니다.</p>
         <hr class="my-4">
-        <p class="lead">
-            <button onclick="openClose()" id="btn-post-box" type="button" class="btn btn-primary">포스팅 박스 열기
-            </button>
-        </p>
+
+        <button onclick="openClose()" id="btn-post-box" type="button" class="closer-button">포스팅 박스 열기
+        </button>
+
     </div>
     <div id="post-box" class="form-post" style="display:none">
         <div>
@@ -245,47 +331,14 @@
     </div>
 
     <div id="cards-box" class="card-columns">
-        <div class="card">
-
+        <div class="card card-3">
             <div class="card-body">
-                <p class="card-title">리뷰 제목</p>
-                <p class="card-text">작성자 아이디</p>
-                <p class="card-text">선택한 공원은?</p>
-                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
+                <p class="card-text">제목이 들어갑니다.</p>
+                <p class="card-text">아이디가 들어갑니다.</p>
+                <p class="card-text">${park}</p>
+                <p class="card-text comment">${comment}</p>
             </div>
-            <div class="card-body">
-                <p class="card-title">리뷰 제목</p>
-                <p class="card-text">작성자 아이디</p>
-                <p class="card-text">선택한 공원은?</p>
-                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
-            </div>
-            <div class="card-body">
-                <p class="card-title">리뷰 제목</p>
-                <p class="card-text">작성자 아이디</p>
-                <p class="card-text">선택한 공원은?</p>
-                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
-            </div>
-            <div class="card-body">
-                <p class="card-title">리뷰 제목</p>
-                <p class="card-text">작성자 아이디</p>
-                <p class="card-text">선택한 공원은?</p>
-                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
-            </div>
-            <div class="card-body">
-                <p class="card-title">리뷰 제목</p>
-                <p class="card-text">작성자 아이디</p>
-                <p class="card-text">선택한 공원은?</p>
-                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
-            </div>
-            <div class="card-body">
-                <p class="card-title">리뷰 제목</p>
-                <p class="card-text">작성자 아이디</p>
-                <p class="card-text">선택한 공원은?</p>
-                <p class="card-text comment">여기에 코멘트가 들어갑니다.</p>
-            </div>
-
         </div>
-
     </div>
 </div>
 </body>

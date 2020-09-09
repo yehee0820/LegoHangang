@@ -23,6 +23,69 @@
             crossorigin="anonymous"></script>
 
     <link href="../static/navbar.css" rel="stylesheet">
+    <link href="../static/button.css" rel="stylesheet">
+
+    <script>
+        jQuery(function ($) {
+            $("body").css("display", "none");
+            $("body").fadeIn(1000);
+            $("a.transition").click(function (event) {
+                event.preventDefault();
+                linkLocation = this.href;
+                $("body").fadeOut(1000, redirectPage);
+            });
+
+            function redirectPage() {
+                window.location = linkLocation;
+            }
+        });
+    </script>
+
+    <style>
+        body {
+            animation: fadein 1000ms ease-out;
+            -moz-animation: fadein 1000ms ease-out; /* Firefox */
+            -webkit-animation: fadein 1000ms ease-out; /* Safari and  Chrome */
+            -o-animation: fadein 1000ms ease-out; /* Opera */
+        }
+
+        @keyframes fadein {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @-moz-keyframes fadein { /* Firefox */
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes fadein { /* Safari and Chrome */
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @-o-keyframes fadein { /* Opera */
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+    </style>
 
     <style>
         .jumbotron {
@@ -179,6 +242,12 @@
             left: 350px;
         }
 
+        .custom-select {
+            margin-top: -4px;
+            height: 43px;
+            border-radius: 0.75em;
+        }
+
     </style>
 </head>
 <body>
@@ -234,7 +303,7 @@
     <p>따릉이와는 다른 대여소입니다.</p>
     <hr class="my-4">
     <div class="input-group">
-        <select class="custom-select" id="inputGroupSelect" aria-label="Example select with button addon">
+        <select class="custom-select" id="inputGroupSelect" aria-label="자전거 대여">
             <option selected>자전거 대여를 하려고 하는 한강공원 위치를 선택하세요</option>
             <option value="1">여의도한강공원</option>
             <option value="2">난지한강공원</option>
@@ -249,7 +318,7 @@
             <option value="11">반포한강공원</option>
         </select>
         <p class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" onclick="BikeInfo()">대여소 찾기</button>
+            <button class="closer-button" type="button" onclick="BikeInfo()">대여소 찾기</button>
         </p>
     </div>
 </div>

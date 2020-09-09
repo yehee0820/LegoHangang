@@ -21,13 +21,85 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
-
     <link href="../static/navbar.css" rel="stylesheet">
+    <link href="../static/blogcard.css" rel="stylesheet">
+    <link href="../static/button.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
+
+
+    <script>
+        jQuery(function ($) {
+            $("body").css("display", "none");
+            $("body").fadeIn(1000);
+            $("a.transition").click(function (event) {
+                event.preventDefault();
+                linkLocation = this.href;
+                $("body").fadeOut(1000, redirectPage);
+            });
+
+            function redirectPage() {
+                window.location = linkLocation;
+            }
+        });
+    </script>
+
+    <style>
+        body {
+            animation: fadein 1000ms ease-out;
+            -moz-animation: fadein 1000ms ease-out; /* Firefox */
+            -webkit-animation: fadein 1000ms ease-out; /* Safari and  Chrome */
+            -o-animation: fadein 1000ms ease-out; /* Opera */
+        }
+
+        @keyframes fadein {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @-moz-keyframes fadein { /* Firefox */
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes fadein { /* Safari and Chrome */
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @-o-keyframes fadein { /* Opera */
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+    </style>
 
     <style>
         .jumbotron {
-            padding-top: 15px;
+            padding-bottom: 40px;
+            margin-bottom: 20px;
         }
+
+        body {
+            margin: 50px;
+        }
+
     </style>
     <!--navbar javascript-->
     <script>
@@ -40,116 +112,608 @@
                 $(this).slideToggle(300, "linear");
             });
         });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            // index.html 로드가 완료되면 자동으로 showStar() 함수를 호출합니다.
-            PicnicInfo();
-        });
-
-        function PicnicInfo() {
-            placeLoc = $("#inputGroupSelect").val()
-            $('#picnic-box').empty()
-            $.ajax({
-                type: 'GET',
-                url: '/place_info?place=' + placeLoc,
-                data: {},
-                success: function (response) {
-                    //카드 만들기
-                    for (let i = 0; i < response['name'].length; i++) {
-                        var key = String((i + 1))
-                        let picName = response['name'][i][key];
-                        let picLoc = response['location'][i][key];
-                        let picTime = response['time'][i][key];
-                        let picUrl = response['url'][i][key];
-                        let picComment = response['comment'][i][key];
-
-                        let pichtml = `
-                       <div class="card">
-                                <div class="card-content">
-                                  <div class="media">
-                                    <div class="media-left">
-                                        <img
-                                          src="#"
-                                          alt="imgUrl 넣는 부분"
-                                        />
-                                    </div>
-                                    <div class="media-content">
-                                      <a href="${picUrl}" target="_blank" class="star-name title is-4">${picName} (좋아요: ${like})</a>
-                                      <p class="subtitle is-6">${picLoc}</p>
-                                      <p class="subtitle is-6">${picTime}</p>
-                                      <p class="subtitle is-6">${picComment}</p>
-
-                                    </div>
-                                  </div>
-                                </div>
-                                <footer class="card-footer">
-                                  <a href="#" onclick="like('${picName}')" class="card-footer-item has-text-info">
-                                    위로!
-                                    <span class="icon">
-                                      <i class="fas fa-thumbs-up"></i>
-                                    </span>
-                                  </a>
-                                  <a href="#" onclick="dislike('${picName}')" class="card-footer-item has-text-danger">
-                                    삭제
-                                    <span class="icon">
-                                      <i class="fas fa-ban"></i>
-                                    </span>
-                                  </a>
-                                </footer>
-                              </div>`
-
-                        $('#picnic-box').append(pichtml)
-
-                    }
-                }
-            });
-        }
-
-        {#function like(picName) {#}
-        {#    $.ajax({#}
-        {#        type: "POST",#}
-        {#        url: "/picnic/like",#}
-        {#        data: {'name_give': picName},#}
-        {#        success: function (response) {#}
-        {#            if (response['result'] == 'success') {#}
-        {#                // 2. '좋아요 완료!' 얼럿을 띄웁니다.#}
-        {#                alert('좋아요 🥳')#}
-        {#                // 3. 변경된 정보를 반영하기 위해 새로고침합니다.#}
-        {#                window.location.reload()#}
-        {#            }#}
-        {#        }#}
-        {#    });#}
-        {# } #}
-        {##}
-        {#function dislike(picName) {#}
-        {#    // 1. 서버에 1) POST 방식으로, 2) /api/delete 라는 url에, 3) name_give라는 이름으로 name을 전달합니다.#}
-        {#    // 참고) POST 방식이므로 data: {'name_give': name} 과 같은 양식이 되어야합니다!#}
-        {#    $.ajax({#}
-        {#        type: "POST",#}
-        {#        url: "/picnic/dislike",#}
-        {#        data: {'name_give': picName},#}
-        {#        success: function (response) {#}
-        {#            if (response['result'] == 'success') {#}
-        {#                // 2. '삭제 완료! 안녕!' 얼럿을 띄웁니다.#}
-        {#                alert('싫어요 🥺')#}
-        {#                // 3. 변경된 정보를 반영하기 위해 새로고침합니다.#}
-        {#                window.location.reload()#}
-        {#            }#}
-        {#        }#}
-        {#    });#}
-        {# } #}
 
     </script>
+
 
     <style>
-        .jumbotron {
-            margin-top: 3rem;
-            margin-bottom: 1rem;
+        .buttons{
+            margin-top: -5px;
+        }
+    </style>
+
+    <script>
+        function yeouidoPic() {
+            $('#picnic-box').empty()
+            let pichtml = `
+    <div class="blog-card">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/gapjagi.png')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 영등포구 여의나루로 117 114호</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 010-3060-0004</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>갑자기 피크닉</h1>
+            <h2>매일 10:00 - 23:59</h2>
+            <p>행복한 시간을 선물합니다. 네이버 블로그 리뷰수 1위! 인스타 태그수1위! 예약은 간편하게, 결제는 매장에 방문하셔서 해주시면 됩니다.</p>
+            <p class="read-more">
+                <a href="http://sudden-picnic.com/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card alt">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/brown.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 영등포구 여의나루로 117 서울상가</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 0507-1320-0266</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>브라운 텐트 & 피크닉</h1>
+            <h2>매일 10:30 - 02:00</h2>
+            <p>☆텐트맛집 이벤트팡팡☆ 업계평점1위</p>
+            <p class="read-more">
+                <a href="https://browntent.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/hangangae.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 영등포구 여의나루로 117 122호</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 010-8246-1082</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>한강에 피크닉 여의도점</h1>
+            <h2>평일 11:00 - 23:00 (주말 10:00 오픈)</h2>
+            <p>여의도 한강공원에서 피크닉을 즐길 수 있는 텐트, 레저, 조명, 캠핑도구를 대여해 드립니다. 인스타 해시태그와 함께 사진 업로드 시 1시간 추가 이용 가능!</p>
+            <p class="read-more">
+                <a href="https://hangang-picnic.com/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card alt">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/smile.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 영등포구 여의나루로 117 1층</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 0507-1337-7351</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>스마일 피크닉 텐트</h1>
+            <h2>평일 11:00 - 22:00 (주말/공휴일 10:00 오픈)</h2>
+            <p>네이버 예약 시 기본 3시간 + 1시간 추가</p>
+            <p class="read-more">
+                <a href="https://smiletent.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/picnic109.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 영등포구 여의나루로113 공작상가 113호</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 02-784-1090</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>피크닉109 여의도점</h1>
+            <h2>매일 11:00 - 00:00</h2>
+            <p>예약시 6인용 텐트 무료 Size-up+ 피크닉매트서비스</p>
+            <p class="read-more">
+                <a href="https://picnic109.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card alt">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/alpha.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 영등포구 여의나루로113 공작상가 119호</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 010-5652-3952</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>알파텐트</h1>
+            <h2>평일 12:30 - 22:00 (주말/공휴일 12:00 오픈)</h2>
+            <p></p>
+            <p class="read-more">
+                <a href="https://www.instagram.com/alphatent0/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+
+            `
+
+            $('#picnic-box').append(pichtml);
         }
 
-    </style>
+        function nanjiPic() {
+            $('#picnic-box').empty()
+            let pichtml = `
+    <div class="blog-card">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/picnic109.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 마포구 망원로 9</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 02-6403-3333</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>피크닉109 망원본점</h1>
+            <h2>평일 12:00 - 00:00 (주말 10:00 오픈)</h2>
+            <p>인스타 이벤트 중입니다.</p>
+            <p class="read-more">
+                <a href="https://picnic109.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card alt">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/brown.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 마포구 망원로 15 , 1층</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 02-6925-0702</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>피크닉109 망원2호점</h1>
+            <h2>평일 11:00 - 23:00 (주말 10:00 오픈)</h2>
+            <p></p>
+            <p class="read-more">
+                <a href="https://picnic109.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+        `
+            $('#picnic-box').append(pichtml);
+        }
+
+        function dduksumPic() {
+            $('#picnic-box').empty()
+            let pichtml = `
+    <div class="blog-card">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/picnic109.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 광진구 자양번영로1길 35</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 0507-1342-9566</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>피크닉109 뚝섬점</h1>
+            <h2>평일 11:00 - 23:00 (주말 10:00 오픈)</h2>
+            <p></p>
+            <p class="read-more">
+                <a href="https://picnic109.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card alt">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/thetent.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 광진구 뚝섬로34길 67 광진트라팰리스 104호</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 0507-1314-4910</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>더텐트</h1>
+            <h2>매일 11:00 - 22:00</h2>
+            <p></p>
+            <p class="read-more">
+                <a href="https://thetenthanriver.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/healing.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 광진구 능동로 25</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 070-8802-2406</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>힐링텐트</h1>
+            <h2>매일 11:00 - 23:00</h2>
+            <p></p>
+            <p class="read-more">
+                <a href="https://healingtent.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card alt">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/sunny.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 광진구 능동로 18 123호</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 010-5635-8788</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>써니텐트</h1>
+            <h2>월-목 11:00 - 22:00 / 금-일 10:00 - 23:00</h2>
+            <p></p>
+            <p class="read-more">
+                <a href="https://sunnytent.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/tentin.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 광진구 능동로 7</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 0507-1329-0134</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>텐트인</h1>
+            <h2>매일 10:00 - 22:00</h2>
+            <p></p>
+            <p class="read-more">
+                <a href="https://tentinhangang.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card alt">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/youngtent.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 광진구 능동로 18</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 010-8098-4560</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>영텐트</h1>
+            <h2>매일 10:00 - 22:00</h2>
+            <p></p>
+            <p class="read-more">
+                <a href="https://youngtent.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+
+            `
+
+            $('#picnic-box').append(pichtml);
+        }
+
+        function gwangnaruPic() {
+            $('#picnic-box').empty()
+            let pichtml = `
+    <div class="blog-card">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/picnic109.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 강동구 천중로 6 104호</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 0507-1335-3152</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>피크닉109 광나루점</h1>
+            <h2>매일 10:00 - 23:00</h2>
+            <p>네이버 리뷰작성 이벤트 / 인스타그램 이벤트 진행중</p>
+            <p class="read-more">
+                <a href="https://picnic109.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card alt">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/nineseven.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 강동구 천호대로 977</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 02-6925-0702</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>천호977 카페</h1>
+            <h2>월,화 휴무 / 나머지 13:00 - 22:00</h2>
+            <p>피크닉세트 예약은 전화로 받지 않습니다. 카카오톡에서 "천호977"을 검색 해 주세요!</p>
+            <p class="read-more">
+                <a href="http://www.instagram.com/cheonho977">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/awesome.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 송파구 풍성로 75 1층</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 0507-1311-4021</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>어썸 피크닉</h1>
+            <h2>매일 10:00 - 18:00</h2>
+            <p></p>
+            <p class="read-more">
+                <a href="http://seoulpicnic.site/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+        `
+            $('#picnic-box').append(pichtml);
+        }
+
+        function mangwonPic() {
+            $('#picnic-box').empty()
+            let pichtml = `
+    <div class="blog-card">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/picnic109.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 마포구 망원로 9</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 02-6403-3333</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>피크닉109 망원본점</h1>
+            <h2>평일 12:00 - 00:00 (주말 10:00 오픈)</h2>
+            <p>인스타 이벤트 중입니다.</p>
+            <p class="read-more">
+                <a href="https://picnic109.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card alt">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/brown.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 마포구 망원로 15 , 1층</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 02-6925-0702</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>피크닉109 망원2호점</h1>
+            <h2>평일 11:00 - 23:00 (주말 10:00 오픈)</h2>
+            <p></p>
+            <p class="read-more">
+                <a href="https://picnic109.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+        `
+            $('#picnic-box').append(pichtml);
+        }
+
+        function yanghwaPic() {
+            $('#picnic-box').empty()
+            let pichtml = `
+    <div class="blog-card">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/picnic109.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 영등포구 양평로22다길 1</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 0507-1335-4654</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>피크닉109 선유점</h1>
+            <h2>평일 13:00 - 23:00 (주말/공휴일 11:00 오픈)</h2>
+            <p></p>
+            <p class="read-more">
+                <a href="https://picnic109.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+
+        `
+            $('#picnic-box').append(pichtml);
+        }
+
+        function ichonPic() {
+            $('#picnic-box').empty()
+            let pichtml = `
+    <div class="blog-card">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/picnic109.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 용산구 이촌로 248 1층 101,2호</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 임시휴업중 입니다.</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>피크닉109 이촌점 (모두의 피크닉)</h1>
+            <h2>매일 12:00 - 20:00</h2>
+            <p>예약 시 6인용 매트 size up + 피크닉매트 서비스</p>
+            <p class="read-more">
+                <a href="https://picnic109.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+        `
+            $('#picnic-box').append(pichtml);
+        }
+
+        function jamwonPic() {
+            $('#picnic-box').empty()
+            let pichtml = `
+    <div class="blog-card">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/picnic109.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 서초구 신반포로23길 41 잠원쇼핑센터 108호</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 0507-1388-1001</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>피크닉109 반포점</h1>
+            <h2>매일 12:00 - 19:00</h2>
+            <p>인스타 업로드 시 1시간 무료</p>
+            <p class="read-more">
+                <a href="https://picnic109.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card alt">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/picnic109.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 서초구 잠원로 209-1 1층 101호</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 02-532-1109</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>피크닉109 잠원점</h1>
+            <h2>평일 12:00 - 20:00</h2>
+            <p></p>
+            <p class="read-more">
+                <a href="https://picnic109.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/hangangae.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 서초구 반포대로 316 씨티21 206호</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 010-8261-1082</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>한강에 피크닉 반포점</h1>
+            <h2>평일 14:00 - 22:00 (주말/공휴일 12:00 오픈)</h2>
+            <p>대여시간 무제한 이벤트 진행중</p>
+            <p class="read-more">
+                <a href="https://hangang-picnic.com/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card alt">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/modoo.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 서초구 신반포로23길 41 잠원상가 지하1층 20호,23호</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 0507-1354-5840</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>모두의 피크닉</h1>
+            <h2>매일 12:00 - 23:00</h2>
+            <p>우천 시 휴무</p>
+            <p class="read-more">
+                <a href="https://modoopicnic.modoo.at/7">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+        `
+            $('#picnic-box').append(pichtml);
+        }
+
+        function banpoPic() {
+            $('#picnic-box').empty()
+            let pichtml = `
+    <div class="blog-card">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/picnic109.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 서초구 신반포로23길 41 잠원쇼핑센터 108호</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 0507-1388-1001</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>피크닉109 반포점</h1>
+            <h2>매일 12:00 - 19:00</h2>
+            <p>인스타 업로드 시 1시간 무료</p>
+            <p class="read-more">
+                <a href="https://picnic109.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card alt">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/picnic109.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 서초구 잠원로 209-1 1층 101호</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 02-532-1109</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>피크닉109 잠원점</h1>
+            <h2>평일 12:00 - 20:00</h2>
+            <p></p>
+            <p class="read-more">
+                <a href="https://picnic109.modoo.at/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/hangangae.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 서초구 반포대로 316 씨티21 206호</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 010-8261-1082</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>한강에 피크닉 반포점</h1>
+            <h2>평일 14:00 - 22:00 (주말/공휴일 12:00 오픈)</h2>
+            <p>대여시간 무제한 이벤트 진행중</p>
+            <p class="read-more">
+                <a href="https://hangang-picnic.com/">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+    <div class="blog-card alt">
+        <div class="meta">
+            <div class="photo"
+                 style="background-image: url('../static/images/picnic/modoo.jpeg')"></div>
+            <ul class="details">
+                <li class="address"><i class="fas fa-bookmark"> 서울 서초구 신반포로23길 41 잠원상가 지하1층 20호,23호</i></li>
+                <li class="time"><i class="far fa-calendar-alt"> 0507-1354-5840</i></li>
+            </ul>
+        </div>
+        <div class="description">
+            <h1>모두의 피크닉</h1>
+            <h2>매일 12:00 - 23:00</h2>
+            <p>우천 시 휴무</p>
+            <p class="read-more">
+                <a href="https://modoopicnic.modoo.at/7">Go to website <i class="far fa-compass"></i></a>
+            </p>
+        </div>
+    </div>
+        `
+            $('#picnic-box').append(pichtml);
+        }
+    </script>
+
 </head>
 <body>
 
@@ -199,50 +763,23 @@
 </header>
 
 <div class="jumbotron">
-    <h1 class="display-4">한강공원에서 피크닉 즐기기</h1>
-    <p class="lead">피크닉 세트, 레저 용품, 텐트, 캠핑 세트 등 다양한 용품들을 대여할 수 있는 공간을 알려줍니다.</p>
+    <h1 class="display-4" style="margin-bottom: 10px">한강공원에서 피크닉 즐기기</h1>
+    <p class="lead" style="margin-bottom: 10px">피크닉 세트, 레저 용품, 텐트, 캠핑 세트 등 다양한 용품들을 대여할 수 있는 공간을 알려줍니다.</p>
     <p>** 강서, 잠실 지역은 데이터가 존재하지 않습니다. **</p>
     <hr class="my-4">
-    <div class="input-group">
-        <select class="custom-select" id="inputGroupSelect" aria-label="Example select with button addon">
-            <option selected>대여하고자 하는 한강공원 위치를 선택하세요</option>
-            <option value="1">여의도한강공원</option>
-            <option value="2">난지한강공원</option>
-            <option value="3">뚝섬한강공원</option>
-            <option value="4">광나루한강공원</option>
-            <option value="7">망원한강공원</option>
-            <option value="8">양화한강공원</option>
-            <option value="9">이촌한강공원</option>
-            <option value="10">잠원한강공원</option>
-            <option value="11">반포한강공원</option>
-        </select>
-        <p class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" onclick="PicnicInfo()">대여소 찾기</button>
-        </p>
+    <div class="buttons">
+        <button class="yeouido-button" onclick="yeouidoPic()">여의도</button>
+        <button class="nanji-button" onclick="nanjiPic()">난지</button>
+        <button class="dduksum-button" onclick="dduksumPic()">뚝섬</button>
+        <button class="gwang-button" onclick="gwangnaruPic()">광나루</button>
+        <button class="mangwon-button" onclick="mangwonPic()">망원</button>
+        <button class="yanghwa-button" onclick="yanghwaPic()">양화</button>
+        <button class="ichon-button" onclick="ichonPic()">이촌</button>
+        <button class="jamwon-button" onclick="jamwonPic()">잠원</button>
+        <button class="banpo-button" onclick="banpoPic()">반포</button>
     </div>
 </div>
 
-<div class="picnic-list" id="picnic-box">
-    <div class="card">
-        <div class="card-content">
-            <div class="media">
-                <div class="media-left">
-                    <img
-                            src="#"
-                            alt="imgUrl 넣는 부분"
-                    />
-                </div>
-                <div class="media-content">
-                    <a href="#" target="_blank" class="star-name title is-4">피크닉 (좋아요: 0)</a>
-                    <p class="subtitle is-6">서울</p>
-                    <p class="subtitle is-6">연중무휴</p>
-                    <p class="subtitle is-6">안녕하세요</p>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
+<div id="picnic-box"></div>
 </body>
 </html>

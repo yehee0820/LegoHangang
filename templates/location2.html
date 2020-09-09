@@ -24,7 +24,72 @@
 
     <link href="../static/navbar.css" rel="stylesheet">
     <link href="../static/bubblefooter.css" rel="stylesheet">
+    <link href="../static/button.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
 
+
+    <script>
+        jQuery(function ($) {
+            $("body").css("display", "none");
+            $("body").fadeIn(1000);
+            $("a.transition").click(function (event) {
+                event.preventDefault();
+                linkLocation = this.href;
+                $("body").fadeOut(1000, redirectPage);
+            });
+
+            function redirectPage() {
+                window.location = linkLocation;
+            }
+        });
+    </script>
+
+    <style>
+        body {
+            animation: fadein 1000ms ease-out;
+            -moz-animation: fadein 1000ms ease-out; /* Firefox */
+            -webkit-animation: fadein 1000ms ease-out; /* Safari and  Chrome */
+            -o-animation: fadein 1000ms ease-out; /* Opera */
+        }
+
+        @keyframes fadein {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @-moz-keyframes fadein { /* Firefox */
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes fadein { /* Safari and Chrome */
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @-o-keyframes fadein { /* Opera */
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+    </style>
 
     <!--navbar javascript-->
     <script>
@@ -61,6 +126,75 @@
                 width: 33.3333%;
             }
         }
+
+        ol {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-family: "Open Sans", "sans-serif";
+        }
+
+        body {
+            margin: 50px;
+        }
+
+        ol.numbered {
+            border-left: 2px solid #efd08d;
+            counter-reset: numbered-list;
+            margin-left: 10px;
+            position: relative;
+        }
+
+        ol.numbered li {
+            font-size: 13px;
+            line-height: 0.7;
+            margin-bottom: 30px;
+            padding-left: 20px;
+        }
+
+        ol.numbered li:last-child {
+            border-left: 3px solid white;
+            margin-left: -3px;
+        }
+
+        ol.numbered li:before {
+            background-color: #98b75e;
+            border: 3px solid white;
+            border-radius: 50%;
+            color: white;
+            content: counter(numbered-list, decimal);
+            counter-increment: numbered-list;
+            display: block;
+            font-weight: bold;
+            width: 30px;
+            height: 30px;
+            margin-top: -0.5em;
+            line-height: 23px;
+            position: absolute;
+            left: -17.5px;
+            text-align: center;
+        }
+
+        .jumbotron {
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .moving{
+            font-weight: 400;
+            font-size: 18px;
+            font-family: monospace;
+        }
+
+
     </style>
 
 </head>
@@ -115,11 +249,11 @@
 
 <div class="wrap">
     <div class="jumbotron">
-        <h1 class="display-4">가장 가까운 한강찾기</h1>
-        <p class="lead">현위치에서 가장 가까운 한강공원의 위치 및 길 찾기 정보를 제공합니다. (위치정보 허용)</p>
+        <h1 class="display-4" style="margin-bottom: 10px">가장 가까운 한강찾기</h1>
+        <p class="lead" style="margin-bottom: 20px">현위치에서 가장 가까운 한강공원의 위치 및 길 찾기 정보를 제공합니다. (위치정보 허용)</p>
         <div class="input-group">
             <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" onclick="find_loc()">내 위치에서 가장 가까운 한강공원은?
+                <button class="closer-button" type="button" onclick="find_loc()">내 위치에서 가장 가까운 한강공원은?
                 </button>
             </div>
         </div>
@@ -128,15 +262,15 @@
     </div>
     <hr class="featurette-divider">
     <div id="result-box" class="row">
-        <div id="map" class="col-md-8" style="height:400px"></div> <!-- this is jido -->
-        <div id="show-info-box" class="col-md-4">
-            <p>이동경로</p>
-            <ul id="route"></ul>
-            <p>소요시간</p>
-            <ul id="totalTime"></ul>
+        <div id="map" class="col-md-7" style="height:350px; margin-left: 30px"></div> <!-- this is jido -->
+        <div id="show-info-box" class="col-md-4" style="margin-left: 30px; margin-top:10px;">
+            <p class="moving"><i class="fas fa-arrow-circle-right"></i> Route</p>
+            <ol class="numbered" id="route">
+            </ol>
         </div>
     </div>
 </div>
+<p style="margin-left: 15px; font-size: 10px;">powered by www.ODsay.com</p>
 
 
 <!-- Naver Developers에서 발급받은 네이버지도 Application Key 입력  -->
@@ -155,7 +289,6 @@
 
     function find_loc() {
         $("#route").empty();
-        $("#totalTime").empty();
         $("#Pname").empty();
         map = new naver.maps.Map('map', mapOptions);
         fastest_way()
@@ -341,11 +474,6 @@
             if (xhr.readyState == 4 && xhr.status == 200) {
                 let subpath = (JSON.parse(xhr.responseText))["result"]["path"][0]["subPath"]
                 let path = (JSON.parse(xhr.responseText))["result"]["path"][0]
-
-                time = "<li>" + path["info"]["totalTime"] + "분 소요 " + "</li>"
-                walking = "<li>" + "총 도보 거리 = " + path["info"]["totalWalk"] + "m" + "</li>"
-                $("#totalTime").append(time)
-                $("#totalTime").append(walking)
 
                 for (let i = 0; i < subpath.length; i++) {
 
