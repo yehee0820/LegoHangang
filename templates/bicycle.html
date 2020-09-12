@@ -108,9 +108,7 @@
     <script>
 
         function BikeInfo() {
-            alert("!!")
             bikeLoc = $("#inputGroupSelect").val()
-            alert(bikeLoc)
             $.ajax({
                 type: 'GET',
                 url: '/bicycle_locate?locate=' + bikeLoc,
